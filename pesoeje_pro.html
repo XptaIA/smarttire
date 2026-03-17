@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>PesoEje Pro — RedLlantas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p1:#0b1626;--p2:#12263f;--p3:#1a3a5c;--p4:#1e4d8c;--p5:#2563a8;
+  --accent:#e8a000;--accent2:#fbbf24;--red:#cc0000;
+  --ok:#16a34a;--wn:#d97706;--dg:#dc2626;
+  --ok-bg:#f0fdf4;--wn-bg:#fffbeb;--dg-bg:#fff1f2;
+  --bg:#0f1c2e;--bg2:#0b1626;--sur:#162033;--sur2:#1a2940;--sur3:#1f3250;
+  --tx:#e8eef5;--tx2:#94a3b8;--bd:#1e3550;--bd2:#243f62;
+  --r:12px;--rs:8px;
+  --ff-head:'Barlow Condensed',sans-serif;
+  --ff-body:'Barlow',sans-serif;
+  --ff-mono:'JetBrains Mono',monospace;
+  --shadow:0 2px 16px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:var(--ff-body);background:var(--bg);color:var(--tx);font-size:14px;-webkit-font-smoothing:antialiased;}
+
+/* ── SPLASH ── */
+#splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--bg2);padding:28px;position:relative;overflow:hidden;}
+#splash::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(37,99,168,.18),transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(204,0,0,.08),transparent 60%);pointer-events:none;}
+.splash-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+.splash-logo{background:white;border-radius:10px;padding:6px 16px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 24px rgba(0,0,0,.4);margin-bottom:8px;}
+.rl-ring{width:26px;height:26px;border:4px solid #cc0000;border-radius:50%;flex-shrink:0;}
+.rl-r{color:#cc0000;font-family:var(--ff-head);font-size:20px;font-weight:900;letter-spacing:-.5px;}
+.rl-b{color:#111;font-family:var(--ff-head);font-size:20px;font-weight:900;letter-spacing:-.5px;}
+.splash-sub{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px;}
+.splash-icon{width:72px;height:72px;border-radius:50%;background:rgba(232,160,0,.08);border:1.5px solid rgba(232,160,0,.3);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px;}
+.splash-title{font-family:var(--ff-head);font-size:38px;font-weight:900;color:var(--tx);letter-spacing:-1px;line-height:1;margin-bottom:6px;text-align:center;}
+.splash-title span{color:var(--accent2);}
+.splash-desc{font-size:12px;color:var(--tx2);margin-bottom:6px;text-align:center;}
+.splash-formula{font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.2);margin-bottom:36px;text-align:center;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:6px 14px;border-radius:20px;}
+.splash-btn{width:100%;max-width:340px;background:linear-gradient(135deg,var(--p3),var(--p4));border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:16px;cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,.4);text-align:left;transition:transform .15s,box-shadow .15s;}
+.splash-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.5);}
+.splash-btn-ico{width:48px;height:48px;background:rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;}
+.splash-btn-txt h3{font-family:var(--ff-head);font-size:17px;font-weight:800;color:#fff;margin-bottom:2px;}
+.splash-btn-txt p{font-size:11px;color:rgba(255,255,255,.5);line-height:1.4;}
+.splash-btn-arr{font-size:20px;color:rgba(255,255,255,.3);margin-left:auto;flex-shrink:0;}
+.splash-footer{margin-top:32px;text-align:center;}
+.splash-footer p{font-size:10px;color:rgba(255,255,255,.18);}
+.smarttire{font-size:11px;color:rgba(60,179,113,.45);font-weight:700;font-family:var(--ff-head);letter-spacing:.5px;margin-top:4px;}
+.smarttire span{color:#3cb371;}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(90deg,var(--p1),var(--p2));padding:0 14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,.5);border-bottom:1px solid var(--bd);}
+.hdr-in{display:flex;align-items:center;gap:11px;height:52px;}
+.lpill{background:white;border-radius:7px;padding:3px 10px;display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.lc{width:20px;height:20px;border:3.5px solid #cc0000;border-radius:50%;margin-right:2px;}
+.htxt{border-left:1px solid rgba(255,255,255,.15);padding-left:11px;}
+.htxt h1{font-family:var(--ff-head);font-size:14px;font-weight:800;color:#fff;letter-spacing:.3px;}
+.htxt .sub{font-size:9px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.htxt .dt{font-size:9px;color:rgba(255,255,255,.35);}
+#histBadge{margin-left:auto;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:5px 11px;font-family:var(--ff-head);font-size:11px;color:rgba(255,255,255,.7);font-weight:700;cursor:pointer;white-space:nowrap;letter-spacing:.3px;transition:background .2s;}
+#histBadge:hover{background:rgba(255,255,255,.12);}
+
+/* ── NAV ── */
+.nav{display:flex;background:var(--p1);border-bottom:1px solid var(--bd);overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.ntab{flex:1;min-width:50px;padding:9px 4px 8px;text-align:center;color:rgba(255,255,255,.3);font-family:var(--ff-head);font-size:9px;font-weight:700;cursor:pointer;border-bottom:2.5px solid transparent;text-transform:uppercase;letter-spacing:.5px;transition:color .2s,border-color .2s;}
+.ntab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+.ntab .ti{font-size:15px;display:block;margin-bottom:2px;}
+.ntab:hover:not(.active){color:rgba(255,255,255,.6);}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:14px;max-width:800px;margin:0 auto;}
+.sec.active{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--sur);border-radius:var(--r);padding:15px;margin-bottom:12px;border:1px solid var(--bd);box-shadow:var(--shadow);}
+.ctitle{font-family:var(--ff-head);font-size:12px;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:13px;display:flex;align-items:center;gap:7px;padding-bottom:9px;border-bottom:1px solid var(--bd2);}
+.ctitle::before{content:'';display:block;width:3px;height:16px;background:var(--red);border-radius:2px;flex-shrink:0;}
+
+/* ── FORMS ── */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+.fr3{grid-template-columns:1fr 1fr 1fr;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fl{font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px;}
+input,select,textarea{width:100%;padding:9px 11px;border:1.5px solid var(--bd2);border-radius:var(--rs);font-size:13px;font-family:var(--ff-body);color:var(--tx);background:var(--sur2);transition:border-color .2s,background .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--p5);background:var(--sur3);}
+input::placeholder,textarea::placeholder{color:rgba(148,163,184,.4);}
+select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px;}
+select option{background:#1a2940;color:var(--tx);}
+textarea{resize:vertical;min-height:60px;}
+
+/* ── EJE BLOCKS ── */
+.eje-block{border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);}
+.eje-hdr{padding:10px 14px;font-family:var(--ff-head);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:space-between;letter-spacing:.4px;}
+.eje-hdr.dir{background:linear-gradient(90deg,rgba(30,64,175,.4),rgba(30,64,175,.15));border-left:3px solid #3b82f6;color:#93c5fd;}
+.eje-hdr.trac{background:linear-gradient(90deg,rgba(146,64,14,.4),rgba(146,64,14,.15));border-left:3px solid #f59e0b;color:#fcd34d;}
+.eje-hdr.aux{background:linear-gradient(90deg,rgba(107,33,168,.4),rgba(107,33,168,.15));border-left:3px solid #a855f7;color:#d8b4fe;}
+.eje-hdr.rem{background:linear-gradient(90deg,rgba(4,120,87,.4),rgba(4,120,87,.15));border-left:3px solid #10b981;color:#6ee7b7;}
+.eje-body{padding:13px;background:var(--sur);}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.pos-card{background:var(--sur2);border:1px solid var(--bd2);border-radius:var(--rs);padding:10px;}
+.pos-title{font-family:var(--ff-head);font-size:11px;font-weight:800;background:var(--p3);color:#fff;padding:4px 8px;border-radius:6px;margin-bottom:8px;text-align:center;letter-spacing:.4px;}
+.pos-field{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;}
+.pos-field:last-child{border-bottom:none;}
+.pos-field label{color:var(--tx2);font-weight:600;font-size:11px;font-family:var(--ff-head);text-transform:uppercase;letter-spacing:.3px;}
+.pos-field input{width:90px;padding:5px 7px;font-family:var(--ff-mono);font-size:12px;font-weight:700;text-align:center;background:var(--sur3);}
+
+/* ── PSI STATUS ── */
+.psi-ok{color:var(--ok)!important;font-weight:700;}
+.psi-warn{color:var(--wn)!important;font-weight:700;}
+.psi-over{color:var(--dg)!important;font-weight:700;}
+
+/* ── KPI GRID ── */
+.kgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+.kgrid3{grid-template-columns:repeat(3,1fr);}
+.kpi{background:var(--sur2);border:1px solid var(--bd2);border-radius:var(--rs);padding:11px;text-align:center;}
+.kn{font-family:var(--ff-head);font-size:22px;font-weight:900;color:var(--tx);letter-spacing:-.5px;}
+.kl{font-family:var(--ff-head);font-size:10px;color:var(--tx2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;}
+
+/* ── ALERT BADGES ── */
+.ab{border-radius:var(--rs);padding:10px 13px;font-family:var(--ff-body);font-size:12px;font-weight:600;margin-bottom:9px;display:flex;align-items:flex-start;gap:9px;line-height:1.5;}
+.ab-ok{background:rgba(22,163,74,.1);color:#86efac;border-left:3px solid var(--ok);}
+.ab-w{background:rgba(217,119,6,.1);color:#fcd34d;border-left:3px solid var(--wn);}
+.ab-d{background:rgba(220,38,38,.1);color:#fca5a5;border-left:3px solid var(--dg);}
+.ab-i{background:rgba(37,99,168,.15);color:#93c5fd;border-left:3px solid var(--p5);}
+
+/* ── ANALYSIS BLOCKS ── */
+.analysis-block{border-radius:var(--rs);padding:12px 14px;margin-bottom:9px;border:1px solid transparent;}
+.analysis-block.danger{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.2);}
+.analysis-block.warn{background:rgba(217,119,6,.08);border-color:rgba(217,119,6,.2);}
+.analysis-block.ok{background:rgba(22,163,74,.08);border-color:rgba(22,163,74,.2);}
+.analysis-title{font-family:var(--ff-head);font-size:13px;font-weight:800;margin-bottom:6px;letter-spacing:.3px;}
+.analysis-block.danger .analysis-title{color:#fca5a5;}
+.analysis-block.warn .analysis-title{color:#fcd34d;}
+.analysis-block.ok .analysis-title{color:#86efac;}
+.analysis-text{font-size:12px;color:var(--tx2);line-height:1.7;}
+
+/* ── PHOTOS ── */
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.photo-slot{border:1.5px dashed var(--bd2);border-radius:var(--rs);overflow:hidden;background:var(--sur2);position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.photo-slot:hover{border-color:var(--p5);background:var(--sur3);}
+.photo-slot.has-p{border-style:solid;border-color:var(--p5);}
+.ps-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;}
+.ps-ico{font-size:28px;opacity:.6;}
+.ps-lbl{font-family:var(--ff-head);font-size:11px;font-weight:700;color:var(--tx2);text-align:center;padding:0 6px;letter-spacing:.3px;}
+.ps-ret{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:5px;padding:2px 7px;font-family:var(--ff-head);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px;}
+.photo-slot input[type=file]{display:none;}
+.photo-lbl{font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);text-align:center;margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
+
+/* ── HISTORIAL ── */
+.hist-item{background:var(--sur);border:1px solid var(--bd2);border-radius:var(--r);padding:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s,background .2s;}
+.hist-item:hover{border-color:var(--p5);background:var(--sur2);}
+.hist-placa{font-family:var(--ff-head);font-size:16px;font-weight:900;color:var(--tx);letter-spacing:.5px;}
+.hist-meta{font-size:11px;color:var(--tx2);margin-top:3px;font-family:var(--ff-body);}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+.tag{font-family:var(--ff-head);font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;letter-spacing:.3px;}
+.tag.ok{background:rgba(22,163,74,.15);color:#86efac;border:1px solid rgba(22,163,74,.3);}
+.tag.w{background:rgba(217,119,6,.15);color:#fcd34d;border:1px solid rgba(217,119,6,.3);}
+.tag.d{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.3);}
+.tag.i{background:rgba(37,99,168,.2);color:#93c5fd;border:1px solid rgba(37,99,168,.3);}
+.tag.g{background:rgba(255,255,255,.05);color:var(--tx2);border:1px solid var(--bd2);}
+
+/* ── TABLE ── */
+.rtbl{width:100%;border-collapse:collapse;font-size:12px;}
+.rtbl th{background:var(--p2);color:var(--tx2);padding:8px 9px;text-align:left;font-family:var(--ff-head);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--bd);}
+.rtbl td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;color:var(--tx);}
+.rtbl tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.rtbl tr:hover td{background:rgba(255,255,255,.04);}
+.rb{padding:2px 9px;border-radius:10px;font-family:var(--ff-head);font-size:10px;font-weight:700;display:inline-block;letter-spacing:.3px;}
+.rb.ok{background:rgba(22,163,74,.15);color:#86efac;}
+.rb.w{background:rgba(217,119,6,.15);color:#fcd34d;}
+.rb.d{background:rgba(220,38,38,.15);color:#fca5a5;}
+.rb.i{background:rgba(37,99,168,.2);color:#93c5fd;}
+.mono{font-family:var(--ff-mono);font-weight:700;}
+
+/* ── BUTTONS ── */
+.btn-r{width:100%;padding:13px;background:linear-gradient(135deg,#b91c1c,#cc0000);color:#fff;border:none;border-radius:var(--rs);font-family:var(--ff-head);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:7px;letter-spacing:.5px;transition:opacity .2s,transform .15s;}
+.btn-r:hover{opacity:.9;transform:translateY(-1px);}
+.btn-p{width:100%;padding:12px;background:var(--p3);color:#fff;border:none;border-radius:var(--rs);font-family:var(--ff-head);font-size:14px;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.4px;transition:opacity .2s;}
+.btn-p:hover{opacity:.85;}
+.btn-s{width:100%;padding:11px;background:transparent;color:var(--tx2);border:1.5px solid var(--bd2);border-radius:var(--rs);font-family:var(--ff-head);font-size:13px;font-weight:700;cursor:pointer;margin-top:7px;letter-spacing:.4px;transition:border-color .2s,color .2s;}
+.btn-s:hover{border-color:var(--p5);color:var(--tx);}
+.btn-ok{width:100%;padding:13px;background:linear-gradient(135deg,#15803d,#16a34a);color:#fff;border:none;border-radius:var(--rs);font-family:var(--ff-head);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.5px;transition:opacity .2s,transform .15s;}
+.btn-ok:hover{opacity:.9;transform:translateY(-1px);}
+
+/* ── OVERLAY ── */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:flex-end;justify-content:center;}
+.ov.open{display:flex;}
+.sheet{background:var(--sur);border-radius:20px 20px 0 0;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;}
+.shdr{background:var(--p2);color:var(--tx);padding:14px 18px;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--bd);}
+.shdr h2{font-family:var(--ff-head);font-size:15px;font-weight:800;letter-spacing:.4px;}
+.scl{background:none;border:none;color:var(--tx2);font-size:22px;cursor:pointer;transition:color .2s;}
+.scl:hover{color:var(--tx);}
+.sbody{padding:16px;}
+
+/* ── FACTOR SUMMARY ── */
+.factor-sum{background:var(--sur2);border:1px solid var(--bd2);border-radius:var(--rs);padding:12px 14px;margin-top:10px;}
+.factor-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;}
+.factor-row:last-child{border-bottom:none;}
+.factor-val{font-family:var(--ff-mono);font-weight:700;font-size:14px;color:var(--accent);}
+
+/* ── DIST BAR ── */
+.dist-wrap{background:rgba(255,255,255,.08);border-radius:4px;height:5px;margin-top:4px;overflow:hidden;}
+.dist-fill{height:5px;border-radius:4px;background:linear-gradient(90deg,var(--accent2),var(--accent));}
+
+/* ── REPORT COVER ── */
+.rep-cover{background:linear-gradient(135deg,var(--p1),var(--p3));border-radius:var(--r);padding:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.rep-title-area h2{font-family:var(--ff-head);font-size:20px;font-weight:900;color:#fff;letter-spacing:-.3px;}
+.rep-title-area p{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;}
+
+/* ── INFO CHIP ── */
+.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 10px;font-family:var(--ff-head);font-size:11px;color:var(--tx2);font-weight:700;letter-spacing:.3px;}
+
+/* ── SEARCH BAR ── */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bd2);border-radius:var(--rs);padding:8px 12px;margin-bottom:12px;}
+.search-bar input{background:transparent;border:none;font-family:var(--ff-body);font-size:13px;color:var(--tx);flex:1;}
+.search-bar input:focus{outline:none;}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:6px;border-radius:4px;transition:width .4s;}
+.prog-ok{background:linear-gradient(90deg,#15803d,#22c55e);}
+.prog-wn{background:linear-gradient(90deg,#d97706,#fbbf24);}
+.prog-dg{background:linear-gradient(90deg,#b91c1c,#ef4444);}
+
+/* ── LEGEND DOT ── */
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.dot.ok{background:var(--ok);}
+.dot.wn{background:var(--wn);}
+.dot.dg{background:var(--dg);}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--bd2);margin:12px 0;}
+
+/* ── FOOTER ── */
+.app-footer{background:var(--bg2);border-top:1px solid var(--bd);padding:14px 16px 20px;text-align:center;margin-top:16px;}
+.app-footer .fn{font-family:var(--ff-head);font-size:13px;font-weight:900;letter-spacing:.3px;}
+.app-footer .fn span{color:var(--accent2);}
+.app-footer .fi{font-size:10px;color:rgba(255,255,255,.2);margin-top:4px;}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--ok);color:#fff;padding:10px 20px;border-radius:30px;font-family:var(--ff-head);font-weight:800;font-size:14px;z-index:500;box-shadow:0 4px 24px rgba(0,0,0,.4);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;letter-spacing:.4px;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:32px 16px;}
+.empty .ei{font-size:36px;opacity:.3;margin-bottom:10px;}
+.empty p{font-family:var(--ff-head);font-size:13px;font-weight:700;color:var(--tx2);letter-spacing:.3px;}
+
+/* ── Numeric inputs ── */
+input[type=number]{font-family:var(--ff-mono);}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{opacity:.4;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--p4);}
+
+/* ── FADE-IN ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.sec.active .card,.sec.active .eje-block,.sec.active .hist-item,.sec.active .kgrid{animation:fadeUp .25s ease both;}
+
+/* ── PBV LIMIT BAR ── */
+.pbv-bar-wrap{margin:10px 0;background:rgba(255,255,255,.06);border-radius:8px;height:10px;overflow:hidden;}
+.pbv-bar-fill{height:10px;border-radius:8px;transition:width .5s;}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-family:var(--ff-head);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--tx2);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--bd2);}
+
+/* ── inline highlight ── */
+.hl{color:var(--accent2);font-weight:700;}
+.hl-r{color:#fca5a5;font-weight:700;}
+.hl-g{color:#86efac;font-weight:700;}
+
+/* ── ANALITICA / SUMMARY BANNER ── */
+.summary-banner{background:linear-gradient(135deg,var(--p2),var(--p3));border-radius:var(--r);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--bd);}
+.sb-item{text-align:center;}
+.sb-val{font-family:var(--ff-head);font-size:20px;font-weight:900;color:var(--tx);line-height:1;}
+.sb-lbl{font-family:var(--ff-head);font-size:9px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px;margin-top:3px;}
+.sb-div{width:1px;height:32px;background:var(--bd2);}
+
+/* ── ITABS ── */
+.itabs{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap;}
+.itab{padding:6px 13px;border-radius:20px;font-family:var(--ff-head);font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--bd2);color:var(--tx2);background:transparent;letter-spacing:.4px;transition:all .2s;}
+.itab.active{background:var(--p3);color:#fff;border-color:var(--p3);}
+</style>
+</head>
+<body>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════ SPLASH ══════════════════════════════════════ -->
+<div id="splash">
+  <div class="splash-grid"></div>
+  <div class="splash-logo">
+    <div class="rl-ring"></div>
+    <span class="rl-r">Red</span><span class="rl-b">llantas</span>
+  </div>
+  <div class="splash-sub">Programa de Soporte Técnico a Flotas Vehiculares</div>
+  <div class="splash-icon">⚖️</div>
+  <div class="splash-title"><span>Peso</span>Eje Pro</div>
+  <div class="splash-desc">Análisis de Presiones de Inflado por Ejes de Carga</div>
+
+  <!-- TABLA RESOLUCIÓN 4100 -->
+  <div style="width:100%;max-width:380px;margin-bottom:22px;">
+    <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:7px;display:flex;align-items:center;gap:8px;">
+      <span style="display:block;width:3px;height:14px;background:var(--red);border-radius:2px;flex-shrink:0;"></span>
+      Resolución 4100 · Pesos Máximos Colombia
+    </div>
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;font-size:11px;">
+        <thead>
+          <tr style="background:rgba(255,255,255,.07);">
+            <th style="font-family:var(--ff-head);font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;font-size:9px;padding:7px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07);">Configuración</th>
+            <th style="font-family:var(--ff-head);font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;font-size:9px;padding:7px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07);">PBV Máx.</th>
+            <th style="font-family:var(--ff-head);font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;font-size:9px;padding:7px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07);">Eje Simple</th>
+            <th style="font-family:var(--ff-head);font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;font-size:9px;padding:7px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07);">Eje Doble</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+            <td style="padding:6px 10px;color:#93c5fd;font-family:var(--ff-head);font-weight:700;font-size:11px;">C2 — 2 ejes</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">17.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.02);">
+            <td style="padding:6px 10px;color:#93c5fd;font-family:var(--ff-head);font-weight:700;font-size:11px;">C3 — 3 ejes</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">28.500</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+            <td style="padding:6px 10px;color:#93c5fd;font-family:var(--ff-head);font-weight:700;font-size:11px;">C4 / Mixer 8x4</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">32.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.02);">
+            <td style="padding:6px 10px;color:#fcd34d;font-family:var(--ff-head);font-weight:700;font-size:11px;">C2S1 / C2R2 / C2B2</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">32.000 – 40.500</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+            <td style="padding:6px 10px;color:#fcd34d;font-family:var(--ff-head);font-weight:700;font-size:11px;">C3S2 / C3R2 / C3B2</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">48.500</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+          <tr style="background:rgba(255,255,255,.02);">
+            <td style="padding:6px 10px;color:#6ee7b7;font-family:var(--ff-head);font-weight:700;font-size:11px;">C3S3 / C3R3 / C4R2</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-weight:700;color:var(--tx);">52.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">6.000</td>
+            <td style="padding:6px 8px;text-align:right;font-family:var(--ff-mono);font-size:10px;color:var(--tx2);">11.000</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding:6px 10px 7px;background:rgba(204,0,0,.08);border-top:1px solid rgba(204,0,0,.2);display:flex;align-items:center;gap:6px;">
+        <span style="font-size:11px;">⚖️</span>
+        <span style="font-family:var(--ff-head);font-size:9px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.4px;">Pesos en kg · Res. 4100/2004 MINTRANSPORTE · INVIAS Colombia</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="splash-btn" onclick="launchApp()">
+    <div class="splash-btn-ico">🚛</div>
+    <div class="splash-btn-txt">
+      <h3>Iniciar Análisis</h3>
+      <p>Pesaje por eje · PSI recomendado · Factor corrección · Reporte</p>
+    </div>
+    <div class="splash-btn-arr">›</div>
+  </button>
+  <div class="splash-footer">
+    <p>flotasbog1&#64;redllantas&#46;com</p>
+    <div class="smarttire"><span>Smart</span>Tire IA.Xpta · PesoEje Pro v4 © RedLlantas 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ APP ══════════════════════════════════════ -->
+<div id="appWrap" style="display:none;">
+
+<div class="hdr">
+  <div class="hdr-in">
+    <div class="lpill"><div class="lc"></div><span class="rl-r" style="font-size:15px;">Red</span><span class="rl-b" style="font-size:15px;">llantas</span></div>
+    <div class="htxt">
+      <div class="sub">Análisis Presión de Inflado por Ejes</div>
+      <h1>PesoEje Pro</h1>
+      <div class="dt" id="hDate"></div>
+    </div>
+    <button id="histBadge" onclick="goTab(4)">📋 0 registros</button>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="ntab active" onclick="goTab(0)"><span class="ti">📋</span>Vehículo</div>
+  <div class="ntab" onclick="goTab(1)"><span class="ti">⚖️</span>Ejes</div>
+  <div class="ntab" onclick="goTab(2)"><span class="ti">📊</span>Análisis</div>
+  <div class="ntab" onclick="goTab(3)"><span class="ti">📷</span>Fotos</div>
+  <div class="ntab" onclick="goTab(4)"><span class="ti">📅</span>Historial</div>
+  <div class="ntab" onclick="goTab(5)"><span class="ti">📄</span>Reporte</div>
+</div>
+
+<!-- ══════════ TAB 0: VEHÍCULO ══════════ -->
+<div class="sec active" id="tab0">
+  <div class="card">
+    <div class="ctitle">🚛 Datos del Vehículo</div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Placa</label>
+        <input type="text" id="v_placa" placeholder="MX463" style="text-transform:uppercase;font-family:var(--ff-mono);font-weight:700;font-size:16px;letter-spacing:1px;">
+      </div>
+      <div class="fg">
+        <label class="fl">Marca / Modelo</label>
+        <input type="text" id="v_marca" placeholder="International, Sitrak, DAF...">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Configuración Vehicular</label>
+        <select id="v_config" onchange="onConfigChange()">
+          <option value="">Seleccionar configuración...</option>
+          <optgroup label="── CAMIONES RÍGIDOS ──">
+            <option value="c2">C2 — Camión 2 ejes | 17.000 kg</option>
+            <option value="c3">C3 — Camión 3 ejes | 28.500 kg</option>
+            <option value="c4">C4 — Camión 4 ejes | 32.000 kg</option>
+            <option value="c4aux">C4 Eje Auxiliar — Cuatromanos/Retráctil | 32.000 kg</option>
+          </optgroup>
+          <optgroup label="── TRACTOCAMIONES (C+S) ──">
+            <option value="c2s1">C2S1 — 2+1 ejes | 32.000 kg</option>
+            <option value="c2s2">C2S2 — 2+2 ejes | 40.500 kg</option>
+            <option value="c2s3">C2S3 — 2+3 ejes | 40.500 kg</option>
+            <option value="c3s1">C3S1 — 3+1 ejes | 40.500 kg</option>
+            <option value="c3s2">C3S2 — 3+2 ejes | 48.500 kg</option>
+            <option value="c3s3">C3S3 — 3+3 ejes | 52.000 kg</option>
+          </optgroup>
+          <optgroup label="── CAMIÓN + REMOLQUE (C+R) ──">
+            <option value="c2r2">C2R2 — 2+2 ejes | 40.500 kg</option>
+            <option value="c3r2">C3R2 — 3+2 ejes | 48.500 kg</option>
+            <option value="c3r3">C3R3 — 3+3 ejes | 52.000 kg</option>
+            <option value="c4r2">C4R2 — 4+2 ejes | 52.000 kg</option>
+          </optgroup>
+          <optgroup label="── REMOLQUE BALANCEADO (C+B) ──">
+            <option value="c2b2">C2B2 — 2+2 ejes | 40.500 kg</option>
+            <option value="c3b2">C3B2 — 3+2 ejes | 48.500 kg</option>
+          </optgroup>
+          <optgroup label="── MIXER / ESPECIALES ──">
+            <option value="6x4mix">6x4 Mixer — 1 Dir. + 2 Trac. | 28.500 kg</option>
+            <option value="8x4mix">8x4 Mixer — 2 Dir. + 2 Trac. | 32.000 kg</option>
+            <option value="8x4aux">8x4 Eje Auxiliar — Cuatromanos/Retráctil | 32.000 kg</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Tipología</label>
+        <input type="text" id="v_tipo" placeholder="Mixer, Volqueta, Plataforma...">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Estado del Vehículo</label>
+        <select id="v_estado">
+          <option value="cargado">Cargado</option>
+          <option value="vacio">Vacío (Tara)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Descripción de Carga</label>
+        <input type="text" id="v_carga" placeholder="7mts³, 6mts³, Granel...">
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Empresa / Cliente</label>
+        <input type="text" id="v_empresa" placeholder="CEMEX, ARGOS, HOLCIM...">
+      </div>
+      <div class="fg">
+        <label class="fl">Analista RedLlantas</label>
+        <select id="v_analista">
+          <option value="">Seleccionar...</option>
+          <option>Diego Hincapié Yepes</option>
+          <option>Elvis Ahumada Hernández</option>
+          <option>Andrés Villalobos</option>
+          <option>Juan Mauricio Restrepo</option>
+          <option>Víctor Achinte Batero</option>
+          <option>Juan Sebastián Osma</option>
+          <option>Gonzalo Zapata Agudelo</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Fecha de Análisis</label>
+        <input type="date" id="v_fecha">
+      </div>
+      <div class="fg">
+        <label class="fl">Báscula / Punto de Pesaje</label>
+        <input type="text" id="v_bascula" placeholder="Ubicación de pesaje">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Kilometraje</label>
+        <input type="number" id="v_km" placeholder="ej: 85000">
+      </div>
+      <div class="fg">
+        <label class="fl">Observación General</label>
+        <input type="text" id="v_obs" placeholder="Notas adicionales...">
+      </div>
+    </div>
+  </div>
+  <button class="btn-ok" onclick="buildEjes();goTab(1)">Configurar Ejes →</button>
+</div>
+
+<!-- ══════════ TAB 1: EJES ══════════ -->
+<div class="sec" id="tab1">
+
+  <!-- ── PANEL PESAJE & FACTOR DE CORRECCIÓN ── -->
+  <div class="card" id="fcPanel">
+    <div class="ctitle">⚖️ Pesaje del Vehículo &amp; Factor de Corrección</div>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Peso Real Báscula (kg)</label>
+        <input type="number" id="peso_bascula" placeholder="ej: 28340"
+               style="font-family:var(--ff-mono);font-size:16px;font-weight:700;border-color:var(--accent);"
+               oninput="recalcFC()">
+        <span style="font-size:10px;color:var(--tx2);margin-top:3px;">Peso total registrado en báscula certificada</span>
+      </div>
+      <div class="fg">
+        <label class="fl">Sumatoria Pesos Ejes (kg)</label>
+        <input type="number" id="peso_suma_ejes" placeholder="Se calcula solo"
+               style="font-family:var(--ff-mono);font-size:16px;font-weight:700;background:var(--sur3);border-color:var(--bd2);"
+               readonly>
+        <span style="font-size:10px;color:var(--tx2);margin-top:3px;">Suma automática de todos los ejes ingresados</span>
+      </div>
+    </div>
+    <!-- FC RESULT BOX -->
+    <div id="fcResultBox" style="display:none;margin-top:10px;border-radius:10px;padding:13px 15px;border:2px solid var(--bd2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--tx2);margin-bottom:4px;">Factor de Corrección</div>
+          <div style="font-family:var(--ff-head);font-size:11px;color:var(--tx2);">FC = Peso Báscula / Sumatoria Ejes</div>
+        </div>
+        <div style="text-align:center;">
+          <div id="fcValDisplay" style="font-family:var(--ff-mono);font-size:32px;font-weight:900;line-height:1;">—</div>
+          <div id="fcStatusLabel" style="font-family:var(--ff-head);font-size:11px;font-weight:800;letter-spacing:.4px;margin-top:3px;">—</div>
+        </div>
+        <div id="fcActionBox" style="font-size:12px;color:var(--tx2);max-width:200px;line-height:1.5;"></div>
+      </div>
+      <div id="fcEjesAjustados" style="display:none;margin-top:12px;">
+        <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent2);margin-bottom:7px;">Pesos Corregidos por FC</div>
+        <div id="fcEjesTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ejesContainer">
+    <div class="empty"><div class="ei">⚙️</div><p>Selecciona la configuración en la pestaña Vehículo</p></div>
+  </div>
+  <button class="btn-ok" onclick="calcularAnalisis();goTab(2)">Calcular Análisis →</button>
+  <button class="btn-s" onclick="goTab(0)">← Volver a Vehículo</button>
+</div>
+
+<!-- ══════════ TAB 2: ANÁLISIS ══════════ -->
+<div class="sec" id="tab2">
+  <div id="analisisContainer">
+    <div class="empty"><div class="ei">📊</div><p>Completa el pesaje de ejes para ver el análisis</p></div>
+  </div>
+  <button class="btn-ok" onclick="guardarRegistro()">💾 Guardar Registro</button>
+  <button class="btn-s" onclick="goTab(1)">← Volver a Ejes</button>
+</div>
+
+<!-- ══════════ TAB 3: FOTOS & CG ══════════ -->
+<div class="sec" id="tab3">
+
+  <!-- ──────────────────────────────────────
+       SECCIÓN 1: FOTOS BÁSCULA POR EJE
+  ─────────────────────────────────────── -->
+  <div class="card">
+    <div class="ctitle">⚖️ Lecturas de Báscula por Eje</div>
+    <p style="font-size:12px;color:var(--tx2);margin-bottom:13px;line-height:1.6;">
+      Fotografía de cada lectura de báscula correspondiente al eje pesado. Asegúrese de que la pantalla de la báscula sea legible.
+    </p>
+    <div id="basicaEjesContainer">
+      <div class="empty"><div class="ei">⚖️</div><p>Selecciona la configuración del vehículo para ver los ejes</p></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────
+       SECCIÓN 2: FOTOS VEHÍCULO
+  ─────────────────────────────────────── -->
+  <div class="card">
+    <div class="ctitle">🚛 Fotografías del Vehículo</div>
+    <p style="font-size:12px;color:var(--tx2);margin-bottom:13px;line-height:1.6;">
+      Capturas del vehículo desde todos los ángulos requeridos para la evidencia del análisis.
+    </p>
+    <div class="photo-grid">
+      <div>
+        <div class="photo-slot" id="ps_frente" onclick="triggerPhoto('ph_frente')">
+          <div class="ps-ov"><span class="ps-ico">🔵</span><span class="ps-lbl">Frente del Vehículo</span></div>
+        </div>
+        <div class="photo-lbl">Frente</div>
+        <input type="file" id="ph_frente" accept="image/*" capture="environment" onchange="handlePhoto('ps_frente',this,'frente')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_atras" onclick="triggerPhoto('ph_atras')">
+          <div class="ps-ov"><span class="ps-ico">🔴</span><span class="ps-lbl">Parte Trasera</span></div>
+        </div>
+        <div class="photo-lbl">Atrás</div>
+        <input type="file" id="ph_atras" accept="image/*" capture="environment" onchange="handlePhoto('ps_atras',this,'atras')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_lado_izq" onclick="triggerPhoto('ph_lado_izq')">
+          <div class="ps-ov"><span class="ps-ico">◀️</span><span class="ps-lbl">Lado Izquierdo</span></div>
+        </div>
+        <div class="photo-lbl">Lado Izq.</div>
+        <input type="file" id="ph_lado_izq" accept="image/*" capture="environment" onchange="handlePhoto('ps_lado_izq',this,'lado_izq')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_lado_der" onclick="triggerPhoto('ph_lado_der')">
+          <div class="ps-ov"><span class="ps-ico">▶️</span><span class="ps-lbl">Lado Derecho</span></div>
+        </div>
+        <div class="photo-lbl">Lado Der.</div>
+        <input type="file" id="ph_lado_der" accept="image/*" capture="environment" onchange="handlePhoto('ps_lado_der',this,'lado_der')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_llanta_dir" onclick="triggerPhoto('ph_llanta_dir')">
+          <div class="ps-ov"><span class="ps-ico">🛞</span><span class="ps-lbl">Llanta Eje Dirección</span></div>
+        </div>
+        <div class="photo-lbl">Llanta Dir.</div>
+        <input type="file" id="ph_llanta_dir" accept="image/*" capture="environment" onchange="handlePhoto('ps_llanta_dir',this,'llanta_dir')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_llanta_trac" onclick="triggerPhoto('ph_llanta_trac')">
+          <div class="ps-ov"><span class="ps-ico">🛞</span><span class="ps-lbl">Llanta Eje Tracción</span></div>
+        </div>
+        <div class="photo-lbl">Llanta Trac.</div>
+        <input type="file" id="ph_llanta_trac" accept="image/*" capture="environment" onchange="handlePhoto('ps_llanta_trac',this,'llanta_trac')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_dim" onclick="triggerPhoto('ph_dim')">
+          <div class="ps-ov"><span class="ps-ico">📐</span><span class="ps-lbl">Dimensión Llanta (Costado)</span></div>
+        </div>
+        <div class="photo-lbl">Dimensión</div>
+        <input type="file" id="ph_dim" accept="image/*" capture="environment" onchange="handlePhoto('ps_dim',this,'dim')">
+      </div>
+      <div>
+        <div class="photo-slot" id="ps_extra" onclick="triggerPhoto('ph_extra')">
+          <div class="ps-ov"><span class="ps-ico">➕</span><span class="ps-lbl">Foto Adicional</span></div>
+        </div>
+        <div class="photo-lbl">Adicional</div>
+        <input type="file" id="ph_extra" accept="image/*" capture="environment" onchange="handlePhoto('ps_extra',this,'extra')">
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────
+       SECCIÓN 3: DIMENSIONES + CENTRO DE GRAVEDAD
+  ─────────────────────────────────────── -->
+  <div class="card">
+    <div class="ctitle">📐 Dimensiones del Vehículo &amp; Centro de Gravedad</div>
+    <p style="font-size:12px;color:var(--tx2);margin-bottom:13px;line-height:1.6;">
+      Ingrese las dimensiones longitudinales del vehículo para calcular el <strong style="color:var(--accent2);">Centro de Gravedad</strong> mediante la <strong style="color:var(--accent2);">Ecuación de Momentos</strong>.
+      El origen se toma en el eje delantero.
+    </p>
+
+    <!-- DIAGRAMA ESQUEMÁTICO -->
+    <div style="background:var(--sur2);border:1px solid var(--bd2);border-radius:10px;padding:14px;margin-bottom:14px;overflow-x:auto;">
+      <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;color:var(--accent2);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;">Esquema Longitudinal — Distancias desde Eje Delantero</div>
+      <svg viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;">
+        <!-- Chasis -->
+        <rect x="10" y="35" width="400" height="12" rx="3" fill="rgba(37,99,168,.3)" stroke="#2563a8" stroke-width="1"/>
+        <!-- Eje 0 (ref) -->
+        <line x1="60" y1="20" x2="60" y2="65" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="60" cy="65" r="10" fill="none" stroke="#93c5fd" stroke-width="2"/>
+        <text x="60" y="82" text-anchor="middle" font-size="8" fill="#93c5fd" font-family="monospace">E1</text>
+        <!-- Eje 2 -->
+        <line x1="200" y1="20" x2="200" y2="65" stroke="#fcd34d" stroke-width="2"/>
+        <circle cx="200" cy="65" r="10" fill="none" stroke="#fcd34d" stroke-width="2"/>
+        <text x="200" y="82" text-anchor="middle" font-size="8" fill="#fcd34d" font-family="monospace">E2</text>
+        <!-- Eje 3 -->
+        <line x1="330" y1="20" x2="330" y2="65" stroke="#6ee7b7" stroke-width="2"/>
+        <circle cx="330" cy="65" r="10" fill="none" stroke="#6ee7b7" stroke-width="2"/>
+        <text x="330" y="82" text-anchor="middle" font-size="8" fill="#6ee7b7" font-family="monospace">En</text>
+        <!-- CG marker -->
+        <line x1="210" y1="25" x2="210" y2="47" stroke="#e8a000" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <polygon points="210,23 206,29 214,29" fill="#e8a000"/>
+        <text x="215" y="22" font-size="8" fill="#e8a000" font-family="monospace" font-weight="bold">CG</text>
+        <!-- distancia d1 -->
+        <line x1="60" y1="28" x2="200" y2="28" stroke="rgba(255,255,255,.25)" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="130" y="24" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.4)" font-family="monospace">d₁</text>
+        <!-- distancia d2 -->
+        <line x1="60" y1="15" x2="330" y2="15" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <text x="195" y="12" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.35)" font-family="monospace">d₂</text>
+      </svg>
+    </div>
+
+    <!-- FÓRMULA -->
+    <div style="background:rgba(232,160,0,.07);border:1px solid rgba(232,160,0,.25);border-radius:8px;padding:11px 14px;margin-bottom:14px;">
+      <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;color:var(--accent2);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;">Ecuación de Momentos</div>
+      <div style="font-family:var(--ff-mono);font-size:13px;color:var(--tx);line-height:1.8;">
+        X<sub>CG</sub> = Σ(Pᵢ × dᵢ) / Σ(Pᵢ)
+      </div>
+      <div style="font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.6;">
+        Donde <strong>Pᵢ</strong> = peso del eje i &nbsp;·&nbsp; <strong>dᵢ</strong> = distancia del eje i al eje delantero (origen) &nbsp;·&nbsp; <strong>X<sub>CG</sub></strong> = posición longitudinal del centro de gravedad
+      </div>
+    </div>
+
+    <!-- DIMENSIONES GENERALES -->
+    <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+      <span style="width:3px;height:14px;background:var(--red);border-radius:2px;display:inline-block;"></span>
+      Dimensiones Generales del Vehículo
+    </div>
+    <div class="fr fr3" style="margin-bottom:9px;">
+      <div class="fg">
+        <label class="fl">Longitud Total (m)</label>
+        <input type="number" id="dim_longitud" placeholder="ej: 12.5" step="0.01" oninput="calcCG()">
+      </div>
+      <div class="fg">
+        <label class="fl">Ancho Total (m)</label>
+        <input type="number" id="dim_ancho" placeholder="ej: 2.55" step="0.01" oninput="calcCG()">
+      </div>
+      <div class="fg">
+        <label class="fl">Alto Total (m)</label>
+        <input type="number" id="dim_alto" placeholder="ej: 4.10" step="0.01" oninput="calcCG()">
+      </div>
+    </div>
+    <div class="fr" style="margin-bottom:9px;">
+      <div class="fg">
+        <label class="fl">Distancia Frente → 1er Eje (m)</label>
+        <input type="number" id="dim_frente_eje1" placeholder="ej: 1.20" step="0.01" oninput="calcCG()">
+      </div>
+      <div class="fg">
+        <label class="fl">Voladizo Trasero (m)</label>
+        <input type="number" id="dim_voladizo" placeholder="ej: 1.80" step="0.01" oninput="calcCG()">
+      </div>
+    </div>
+
+    <!-- DISTANCIAS ENTRE EJES (dinámico) -->
+    <div style="font-family:var(--ff-head);font-size:10px;font-weight:800;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;margin-top:12px;display:flex;align-items:center;gap:6px;">
+      <span style="width:3px;height:14px;background:var(--p4);border-radius:2px;display:inline-block;"></span>
+      Distancias Entre Ejes (desde Eje Delantero — origen = 0)
+    </div>
+    <div id="distEjesContainer">
+      <div class="empty" style="padding:16px;"><div class="ei" style="font-size:24px;">📐</div><p>Selecciona la configuración del vehículo</p></div>
+    </div>
+
+    <!-- RESULTADO CG -->
+    <div id="cgResultContainer" style="display:none;margin-top:14px;">
+      <div style="background:linear-gradient(135deg,var(--p2),var(--p3));border:1px solid var(--bd2);border-radius:10px;padding:14px 16px;">
+        <div style="font-family:var(--ff-head);font-size:11px;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">📍 Resultado — Centro de Gravedad</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div style="background:rgba(0,0,0,.2);border-radius:8px;padding:11px;text-align:center;">
+            <div id="cgXval" style="font-family:var(--ff-mono);font-size:26px;font-weight:900;color:var(--accent2);">—</div>
+            <div style="font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">X<sub>CG</sub> desde Eje Delant. (m)</div>
+          </div>
+          <div style="background:rgba(0,0,0,.2);border-radius:8px;padding:11px;text-align:center;">
+            <div id="cgPctval" style="font-family:var(--ff-mono);font-size:26px;font-weight:900;color:#93c5fd;">—</div>
+            <div style="font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">% sobre Longitud Wheelbase</div>
+          </div>
+        </div>
+        <!-- Barra CG -->
+        <div style="font-family:var(--ff-head);font-size:10px;color:var(--tx2);margin-bottom:4px;letter-spacing:.4px;font-weight:700;text-transform:uppercase;">Posición sobre Batalla (Wheelbase)</div>
+        <div style="position:relative;background:rgba(255,255,255,.07);border-radius:6px;height:16px;overflow:visible;">
+          <div id="cgBarFill" style="height:16px;border-radius:6px;background:linear-gradient(90deg,#1e4d8c,var(--accent2));transition:width .4s;"></div>
+          <div id="cgMarker" style="position:absolute;top:-4px;width:4px;height:24px;background:var(--accent);border-radius:2px;transition:left .4s;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--ff-mono);font-size:9px;color:var(--tx2);margin-top:3px;">
+          <span>Eje Delant. 0m</span><span>Eje Trasero</span>
+        </div>
+        <!-- Detalle momentos -->
+        <div id="cgMomentosDetalle" style="margin-top:12px;"></div>
+        <!-- Alerta CG -->
+        <div id="cgAlerta" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ TAB 4: HISTORIAL ══════════ -->
+<div class="sec" id="tab4">
+  <div class="card" style="padding:12px 14px 6px;">
+    <div class="ctitle">📅 Historial de Análisis</div>
+    <div class="search-bar">
+      <span style="font-size:14px;opacity:.5;">🔍</span>
+      <input type="text" id="histSearch" placeholder="Buscar por placa, empresa o analista..." oninput="buildHistorial()">
+    </div>
+    <div id="histList">
+      <div class="empty"><div class="ei">📭</div><p>Sin registros guardados</p></div>
+    </div>
+  </div>
+  <button class="btn-r" onclick="exportCSV()">⬇ Descargar CSV</button>
+  <button class="btn-p" onclick="exportHTMLReport()">📄 Reporte HTML/PDF</button>
+  <button class="btn-s" onclick="if(records.length&&confirm('¿Eliminar todos los registros?'))clearAll()">🗑 Limpiar historial</button>
+</div>
+
+<!-- ══════════ TAB 5: REPORTE ══════════ -->
+<div class="sec" id="tab5">
+  <div id="reportContainer">
+    <div class="empty"><div class="ei">📊</div><p>Sin datos para reportar</p></div>
+  </div>
+  <button class="btn-r" onclick="exportCSV()">⬇ Descargar CSV</button>
+  <button class="btn-p" onclick="exportHTMLReport()">📄 Descargar Reporte PDF</button>
+</div>
+
+<!-- ══════════ DETAIL OVERLAY ══════════ -->
+<div class="ov" id="detailOv">
+  <div class="sheet">
+    <div class="shdr"><h2>🔍 Detalle del Análisis</h2><button class="scl" onclick="closeDetail()">✕</button></div>
+    <div class="sbody" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="app-footer">
+  <div class="fn"><span>Peso</span>Eje Pro</div>
+  <div class="fi">RedLlantas · Soporte Técnico a Flotas Vehiculares · flotasbog1&#64;redllantas&#46;com</div>
+  <div class="smarttire" style="margin-top:5px;"><span>Smart</span>Tire IA.Xpta</div>
+</div>
+
+</div><!-- appWrap -->
+
+<script>
+// ════════════════════════════════════════
+//   CONFIGURACIONES DE EJES
+// ════════════════════════════════════════
+var CONFIGS={
+  'c2':{pbv:17000,axles:[
+    {id:'dir',label:'Eje Delantero (Dirección)',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'tras',label:'Eje Trasero (Tracción)',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']}
+  ]},
+  'c3':{pbv:28500,axles:[
+    {id:'dir',label:'Eje Delantero (Dirección)',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Trasero 1 (Tracción)',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Trasero 2 (Tracción)',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']}
+  ]},
+  'c4':{pbv:32000,axles:[
+    {id:'dir1',label:'Eje Dirección 1',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'dir2',label:'Eje Dirección 2',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 2.1 Izq.','Pos. 2.2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']}
+  ]},
+  'c4aux':{pbv:32000,axles:[
+    {id:'dir1',label:'Eje Dirección 1',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'aux',label:'Eje Auxiliar (Retráctil)',tipo:'aux',llantas:2,limEje:6000,posiciones:['Pos. 2.1 Izq.','Pos. 2.2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']}
+  ]},
+  'c2s1':{pbv:32000,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac',label:'Eje Tracción Cabezote',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'s1',label:'Eje Semirremolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']}
+  ]},
+  'c2s2':{pbv:40500,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac',label:'Eje Tracción Cabezote',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'s1',label:'Eje Semirremolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'s2',label:'Eje Semirremolque 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']}
+  ]},
+  'c2s3':{pbv:40500,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac',label:'Eje Tracción Cabezote',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'s1',label:'Eje Semi. 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'s2',label:'Eje Semi. 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'s3',label:'Eje Semi. 3',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']}
+  ]},
+  'c3s1':{pbv:40500,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Trac. 1 Cabezote',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Trac. 2 Cabezote',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'s1',label:'Eje Semirremolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']}
+  ]},
+  'c3s2':{pbv:48500,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'s1',label:'Eje Semi. 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'s2',label:'Eje Semi. 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']}
+  ]},
+  'c3s3':{pbv:52000,axles:[
+    {id:'dir',label:'Eje Dir. Cabezote',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'s1',label:'Eje Semi. 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'s2',label:'Eje Semi. 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']},
+    {id:'s3',label:'Eje Semi. 3',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 19–20 Izq.','Pos. 21–22 Der.']}
+  ]},
+  'c2r2':{pbv:40500,axles:[
+    {id:'dir',label:'Eje Dir. Camión',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac',label:'Eje Tracción Camión',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'r1',label:'Eje Remolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'r2',label:'Eje Remolque 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']}
+  ]},
+  'c3r2':{pbv:48500,axles:[
+    {id:'dir',label:'Eje Dir. Camión',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'r1',label:'Eje Remolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'r2',label:'Eje Remolque 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']}
+  ]},
+  'c3r3':{pbv:52000,axles:[
+    {id:'dir',label:'Eje Dir. Camión',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'r1',label:'Eje Remolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'r2',label:'Eje Remolque 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']},
+    {id:'r3',label:'Eje Remolque 3',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 19–20 Izq.','Pos. 21–22 Der.']}
+  ]},
+  'c4r2':{pbv:52000,axles:[
+    {id:'dir1',label:'Eje Dirección 1',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'dir2',label:'Eje Dirección 2',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 2.1 Izq.','Pos. 2.2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'r1',label:'Eje Remolque 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'r2',label:'Eje Remolque 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']}
+  ]},
+  'c2b2':{pbv:40500,axles:[
+    {id:'dir',label:'Eje Dir. Camión',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac',label:'Eje Tracción Camión',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'b1',label:'Eje Rem. Bal. 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'b2',label:'Eje Rem. Bal. 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']}
+  ]},
+  'c3b2':{pbv:48500,axles:[
+    {id:'dir',label:'Eje Dir. Camión',tipo:'dir',llantas:2,limEje:6000,posiciones:['Pos. 1 Izq.','Pos. 2 Der.']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 3–4 Izq.','Pos. 5–6 Der.']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Pos. 7–8 Izq.','Pos. 9–10 Der.']},
+    {id:'b1',label:'Eje Rem. Bal. 1',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 11–12 Izq.','Pos. 13–14 Der.']},
+    {id:'b2',label:'Eje Rem. Bal. 2',tipo:'rem',llantas:4,limEje:11000,posiciones:['Pos. 15–16 Izq.','Pos. 17–18 Der.']}
+  ]},
+  '6x4mix':{pbv:28500,axles:[
+    {id:'dir',label:'Eje Dirección',tipo:'dir',llantas:2,limEje:6000,posiciones:['Posición 1','Posición 2']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 3–4','Posición 5–6']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 7–8','Posición 9–10']}
+  ]},
+  '8x4mix':{pbv:32000,axles:[
+    {id:'dir1',label:'Eje Dirección 1',tipo:'dir',llantas:2,limEje:6000,posiciones:['Posición 1','Posición 2']},
+    {id:'dir2',label:'Eje Dirección 2',tipo:'dir',llantas:2,limEje:6000,posiciones:['Posición 2.1','Posición 2.2']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 3–4','Posición 5–6']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 7–8','Posición 9–10']}
+  ]},
+  '8x4aux':{pbv:32000,axles:[
+    {id:'dir1',label:'Eje Dirección 1',tipo:'dir',llantas:2,limEje:6000,posiciones:['Posición 1','Posición 2']},
+    {id:'aux',label:'Eje Dir. 2 (Aux/Retráctil)',tipo:'aux',llantas:2,limEje:6000,posiciones:['Posición 2.1','Posición 2.2']},
+    {id:'trac1',label:'Eje Tracción 1',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 3–4','Posición 5–6']},
+    {id:'trac2',label:'Eje Tracción 2',tipo:'trac',llantas:4,limEje:11000,posiciones:['Posición 7–8','Posición 9–10']}
+  ]}
+};
+
+var records=[];
+var currentPhotos={};
+
+// ════════════════════════════════════════
+//   INIT
+// ════════════════════════════════════════
+function launchApp(){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('appWrap').style.display='block';
+  var now=new Date();
+  document.getElementById('hDate').textContent=now.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('v_fecha').value=now.toISOString().split('T')[0];
+  loadFromStorage();
+}
+
+function goTab(i){
+  document.querySelectorAll('.ntab').forEach(function(t,j){t.classList.toggle('active',i===j);});
+  document.querySelectorAll('.sec').forEach(function(s,j){s.classList.toggle('active',i===j);});
+  if(i===3){buildBasculaEjes();buildDistEjes();}
+  if(i===4)buildHistorial();
+  if(i===5)buildReportTab();
+}
+
+function gv(id){var el=document.getElementById(id);return el?(el.value||''):''}
+
+// ════════════════════════════════════════
+//   BUILD EJES
+// ════════════════════════════════════════
+function onConfigChange(){buildEjes();}
+
+function buildEjes(){
+  var cfg=gv('v_config');
+  if(!cfg||!CONFIGS[cfg]){
+    document.getElementById('ejesContainer').innerHTML='<div class="empty"><div class="ei">⚙️</div><p>Selecciona la configuración primero</p></div>';
+    return;
+  }
+  var cfgObj=CONFIGS[cfg];
+  var axles=cfgObj.axles;
+  var pctPBV=axles.map(function(){return 0;});
+
+  var h='<div class="ab ab-i" style="margin-bottom:12px;">📋 PBV máximo (Res. 4100): <strong>'+cfgObj.pbv.toLocaleString('es-CO')+' kg</strong> &nbsp;·&nbsp; Límite eje simple: <strong>6.000 kg</strong> &nbsp;·&nbsp; Eje doble: <strong>11.000 kg</strong></div>';
+
+  axles.forEach(function(eje){
+    var hdrCls=eje.tipo==='dir'?'dir':eje.tipo==='aux'?'aux':eje.tipo==='rem'?'rem':'trac';
+    var tipoLabel=eje.tipo==='dir'?'Dirección':eje.tipo==='aux'?'Auxiliar':eje.tipo==='rem'?'Remolque':'Tracción';
+    h+='<div class="eje-block">';
+    h+='<div class="eje-hdr '+hdrCls+'">';
+    h+='<span>'+eje.label+'</span>';
+    h+='<span style="font-size:11px;opacity:.75;">Lím: '+(eje.limEje||0).toLocaleString('es-CO')+' kg · '+eje.llantas+' llantas</span>';
+    h+='</div>';
+    h+='<div class="eje-body">';
+    // Llanta info
+    h+='<div class="sec-label">Información Llanta</div>';
+    h+='<div class="fr" style="margin-bottom:10px;">';
+    h+='<div class="fg"><label class="fl">Diseño Llanta</label><input type="text" id="eje_dis_'+eje.id+'" placeholder="KMA01, A803, XZY..."></div>';
+    h+='<div class="fg"><label class="fl">Dimensión</label><input type="text" id="eje_dim_'+eje.id+'" placeholder="12R22.5 / 315/80R22.5"></div>';
+    h+='</div>';
+    h+='<div class="fr" style="margin-bottom:10px;">';
+    h+='<div class="fg"><label class="fl">Cap. Carga Single (kg)</label><input type="number" id="eje_cap_'+eje.id+'" placeholder="ej: 3550"></div>';
+    h+='<div class="fg"><label class="fl">Presión Máx. Fábrica (PSI)</label><input type="number" id="eje_maxpsi_'+eje.id+'" placeholder="ej: 120"></div>';
+    h+='</div>';
+    h+='<div class="fr" style="margin-bottom:4px;">';
+    h+='<div class="fg"><label class="fl">Índice Velocidad</label><input type="text" id="eje_iv_'+eje.id+'" placeholder="K, L, J..."></div>';
+    h+='<div class="fg"><label class="fl">DOT / Fecha Fab.</label><input type="text" id="eje_dot_'+eje.id+'" placeholder="ej: 1423"></div>';
+    h+='</div>';
+    // Weight
+    h+='<div class="sec-label" style="margin-top:12px;">Pesaje de Ejes</div>';
+    h+='<div class="fr" style="margin-bottom:6px;">';
+    h+='<div class="fg"><label class="fl">Peso Eje Cargado (kg)</label><input type="number" id="eje_kg_'+eje.id+'" placeholder="0" oninput="onEjeKgChange(\''+eje.id+'\','+eje.posiciones.length+')" style="font-size:16px;font-weight:700;"></div>';
+    h+='<div class="fg"><label class="fl">Profundidad Huella (mm)</label><input type="number" id="eje_profundidad_'+eje.id+'" placeholder="ej: 5.5" step="0.1"></div>';
+    h+='</div>';
+    // Positions
+    h+='<div class="pos-grid">';
+    eje.posiciones.forEach(function(pos,pi){
+      h+='<div class="pos-card">';
+      h+='<div class="pos-title">'+pos+'</div>';
+      h+='<div class="pos-field"><label>Peso (kg)</label><input type="number" id="pos_kg_'+eje.id+'_'+pi+'" placeholder="0" oninput="onPosChange(\''+eje.id+'\','+eje.posiciones.length+')"></div>';
+      h+='<div class="pos-field"><label>PSI Encontrada</label><input type="number" id="pos_psif_'+eje.id+'_'+pi+'" placeholder="ej: 102"></div>';
+      h+='</div>';
+    });
+    h+='</div>';
+    h+='</div></div>';
+  });
+  document.getElementById('ejesContainer').innerHTML=h;
+}
+
+function onEjeKgChange(ejeId, numPos){
+  var total=parseFloat(document.getElementById('eje_kg_'+ejeId).value)||0;
+  if(total>0){
+    var perPos=Math.round(total/numPos);
+    for(var pi=0;pi<numPos;pi++){
+      var el=document.getElementById('pos_kg_'+ejeId+'_'+pi);
+      if(el&&!el.value)el.value=perPos;
+    }
+  }
+  updateSumaEjes();
+  recalcFC();
+}
+
+function onPosChange(ejeId, numPos){
+  var total=0;
+  for(var pi=0;pi<numPos;pi++){
+    var el=document.getElementById('pos_kg_'+ejeId+'_'+pi);
+    if(el&&el.value)total+=parseFloat(el.value)||0;
+  }
+  if(total>0){
+    var mainEl=document.getElementById('eje_kg_'+ejeId);
+    if(mainEl)mainEl.value=total;
+  }
+  updateSumaEjes();
+  recalcFC();
+}
+
+// ════════════════════════════════════════
+//   SUMATORIA EJES & FC EN TIEMPO REAL
+// ════════════════════════════════════════
+function updateSumaEjes(){
+  var cfg=gv('v_config');
+  if(!cfg||!CONFIGS[cfg])return;
+  var axles=CONFIGS[cfg].axles;
+  var suma=0;
+  axles.forEach(function(eje){
+    var el=document.getElementById('eje_kg_'+eje.id);
+    if(el)suma+=parseFloat(el.value)||0;
+  });
+  var sumaEl=document.getElementById('peso_suma_ejes');
+  if(sumaEl)sumaEl.value=suma||'';
+  return suma;
+}
+
+// FC_THRESHOLD: si |FC-1| <= 0.05 (5%) => aplica corrección
+var FC_THRESHOLD=0.05;
+
+function recalcFC(){
+  var bascula=parseFloat(document.getElementById('peso_bascula').value)||0;
+  var suma=updateSumaEjes()||0;
+  var box=document.getElementById('fcResultBox');
+  if(!bascula||!suma){
+    if(box)box.style.display='none';
+    return;
+  }
+  var fc=parseFloat((bascula/suma).toFixed(4));
+  var diff=Math.abs(fc-1);
+  var aplica=diff<=FC_THRESHOLD;
+
+  // Colors & labels
+  var color=aplica?'#86efac':'#fcd34d';
+  var borderColor=aplica?'rgba(22,163,74,.4)':'rgba(217,119,6,.4)';
+  var bgColor=aplica?'rgba(22,163,74,.07)':'rgba(217,119,6,.07)';
+  var statusTxt=aplica?'✅ FC APLICA CORRECCIÓN':'⚠️ FC SIN CORRECCIÓN';
+
+  box.style.display='block';
+  box.style.background=bgColor;
+  box.style.borderColor=borderColor;
+  document.getElementById('fcValDisplay').textContent=fc.toFixed(4);
+  document.getElementById('fcValDisplay').style.color=color;
+
+  var statusEl=document.getElementById('fcStatusLabel');
+  statusEl.textContent=statusTxt;
+  statusEl.style.color=color;
+
+  var actionEl=document.getElementById('fcActionBox');
+  if(aplica){
+    actionEl.innerHTML='<strong style="color:#86efac;">Factor cercano a 1.0</strong><br>Se aplica FC a cada eje.<br>Pesos corregidos = Peso eje × '+fc.toFixed(4);
+  } else {
+    actionEl.innerHTML='<strong style="color:#fcd34d;">Factor alejado de 1.0</strong><br>No se aplica corrección.<br>Se usan los pesos originales de cada eje.';
+  }
+
+  // Show corrected weights table
+  var cfg=gv('v_config');
+  if(cfg&&CONFIGS[cfg]&&aplica){
+    var axles=CONFIGS[cfg].axles;
+    var rows='<table class="rtbl"><thead><tr><th>Eje</th><th style="text-align:right;">Peso Original</th><th style="text-align:right;">Peso Corregido</th><th style="text-align:right;">Δ kg</th></tr></thead><tbody>';
+    axles.forEach(function(eje){
+      var el=document.getElementById('eje_kg_'+eje.id);
+      var orig=parseFloat(el?el.value:0)||0;
+      var corr=Math.round(orig*fc);
+      var delta=corr-orig;
+      rows+='<tr><td><strong>'+eje.label+'</strong></td>';
+      rows+='<td style="text-align:right;" class="mono">'+orig.toLocaleString('es-CO')+'</td>';
+      rows+='<td style="text-align:right;" class="mono" style="color:#86efac;font-weight:700;">'+corr.toLocaleString('es-CO')+'</td>';
+      rows+='<td style="text-align:right;" class="mono" style="color:'+(delta>0?'#fca5a5':'#86efac')+';font-size:11px;">'+(delta>0?'+':'')+delta.toLocaleString('es-CO')+'</td>';
+      rows+='</tr>';
+    });
+    rows+='</tbody></table>';
+    document.getElementById('fcEjesTable').innerHTML=rows;
+    document.getElementById('fcEjesAjustados').style.display='block';
+  } else {
+    document.getElementById('fcEjesAjustados').style.display='none';
+  }
+
+  // Store FC for use in analysis
+  window._fcValue=fc;
+  window._fcAplica=aplica;
+}
+
+// ════════════════════════════════════════
+//   PSI CALCULATION
+// ════════════════════════════════════════
+function calcPsiRecomendado(cargaLlanta,capSingle,maxPsi){
+  if(!capSingle||!maxPsi||!cargaLlanta)return null;
+  return Math.round((cargaLlanta/capSingle)*maxPsi);
+}
+
+// ════════════════════════════════════════
+//   CALCULAR ANÁLISIS
+// ════════════════════════════════════════
+function calcularAnalisis(){
+  var cfg=gv('v_config');
+  if(!cfg||!CONFIGS[cfg]){alert('Selecciona la configuración del vehículo.');return;}
+  var cfgObj=CONFIGS[cfg];
+  var axles=cfgObj.axles;
+  var pbv=cfgObj.pbv;
+  var ejesResult=[];
+  var totalPesoCargado=0;
+
+  axles.forEach(function(eje){
+    var kg=parseFloat(gv('eje_kg_'+eje.id))||0;
+    var cap=parseFloat(gv('eje_cap_'+eje.id))||0;
+    var maxPsi=parseFloat(gv('eje_maxpsi_'+eje.id))||0;
+    var dim=gv('eje_dim_'+eje.id);
+    var dis=gv('eje_dis_'+eje.id);
+    var iv=gv('eje_iv_'+eje.id);
+    var dot=gv('eje_dot_'+eje.id);
+    var prof=parseFloat(gv('eje_profundidad_'+eje.id))||0;
+    var limEje=eje.limEje||11000;
+    totalPesoCargado+=kg;
+    var posData=[];
+    eje.posiciones.forEach(function(pos,pi){
+      posData.push({pos:pos,kg:parseFloat(gv('pos_kg_'+eje.id+'_'+pi))||0,psif:parseFloat(gv('pos_psif_'+eje.id+'_'+pi))||0});
+    });
+    ejesResult.push({id:eje.id,label:eje.label,tipo:eje.tipo,llantas:eje.llantas,kg:kg,cap:cap,maxPsi:maxPsi,limEje:limEje,dim:dim,dis:dis,iv:iv,dot:dot,prof:prof,posiciones:posData});
+  });
+
+  // ── APLICAR FC si corresponde ──
+  var fcVal=window._fcValue||1;
+  var fcAplica=window._fcAplica||false;
+  var pesoBascula=parseFloat(document.getElementById('peso_bascula').value)||0;
+
+  // Aplicar corrección a ejesResult
+  ejesResult.forEach(function(eje){
+    eje.kgOriginal=eje.kg;
+    if(fcAplica&&pesoBascula>0){
+      eje.kg=Math.round(eje.kg*fcVal);
+      eje.fcAplicado=true;
+    } else {
+      eje.fcAplicado=false;
+    }
+  });
+
+  // Recalcular total con pesos corregidos
+  totalPesoCargado=ejesResult.reduce(function(s,e){return s+e.kg;},0);
+
+  // Factor de corrección por distribución de ejes
+  ejesResult.forEach(function(eje){
+    eje.factorCargado=totalPesoCargado>0?parseFloat((eje.kg/totalPesoCargado).toFixed(4)):0;
+    eje.pctDist=totalPesoCargado>0?Math.round((eje.kg/totalPesoCargado)*100):0;
+    eje.overLimite=eje.kg>eje.limEje;
+    // PSI por posicion
+    var llantasPorPos=eje.llantas/eje.posiciones.length;
+    eje.posiciones.forEach(function(p){
+      // Ajustar kg de posición si se aplicó FC
+      if(fcAplica&&pesoBascula>0) p.kg=Math.round(p.kg*fcVal);
+      var cargaLlanta=llantasPorPos>0?Math.round(p.kg/llantasPorPos):0;
+      p.cargaLlanta=cargaLlanta;
+      p.psiRec=calcPsiRecomendado(cargaLlanta,eje.cap,eje.maxPsi);
+      p.capMax=eje.cap>0?Math.round(eje.cap*llantasPorPos):null;
+      // ── ALERTA CAPACIDAD DE CARGA ──
+      p.noCumpleCapacidad=false;
+      if(eje.cap>0&&cargaLlanta>eje.cap){
+        p.noCumpleCapacidad=true;
+        p.excesoCap=cargaLlanta-eje.cap;
+        p.pctSobreCap=Math.round(((cargaLlanta/eje.cap)-1)*100);
+      }
+      if(p.psiRec&&eje.maxPsi){
+        if(p.psiRec>eje.maxPsi){p.psiStatus='over';}
+        else if(p.psif&&Math.abs(p.psiRec-p.psif)<=5){p.psiStatus='ok';}
+        else{p.psiStatus='warn';}
+      }
+    });
+    // Capacidad eje
+    if(eje.cap>0){
+      eje.capEje=eje.cap*eje.llantas;
+      eje.pctCapacidad=Math.round((eje.kg/eje.capEje)*100);
+      eje.diffCap=Math.round(((eje.kg/eje.capEje)-1)*100);
+    }
+  });
+
+  var factorCorreccion=parseFloat(ejesResult.reduce(function(s,e){return s+e.factorCargado;},0).toFixed(3));
+  var pesoDir=0,pesoTrac=0;
+  ejesResult.forEach(function(e){
+    if(e.tipo==='dir'||e.tipo==='aux')pesoDir+=e.kg;else pesoTrac+=e.kg;
+  });
+  var pctDir=totalPesoCargado>0?Math.round((pesoDir/totalPesoCargado)*100):0;
+  var pctTrac=totalPesoCargado>0?Math.round((pesoTrac/totalPesoCargado)*100):0;
+  var overPBV=totalPesoCargado>pbv;
+  var margenPBV=pbv-totalPesoCargado;
+  var overEjes=ejesResult.filter(function(e){return e.overLimite;});
+  var pbvPct=totalPesoCargado>0?Math.min(115,Math.round((totalPesoCargado/pbv)*100)):0;
+  var pbvBarCls=pbvPct>100?'prog-dg':pbvPct>90?'prog-wn':'prog-ok';
+
+  var h='';
+  // RESUMEN GENERAL
+  h+='<div class="card">';
+  h+='<div class="ctitle">📊 Resumen General — '+gv('v_placa').toUpperCase()+'</div>';
+  if(overPBV){
+    h+='<div class="ab ab-d">🚨 EXCEDE PBV máximo (Res. 4100): <strong>'+(totalPesoCargado-pbv).toLocaleString('es-CO')+' kg</strong> sobre el límite de '+pbv.toLocaleString('es-CO')+' kg</div>';
+  }
+  if(overEjes.length>0){
+    h+='<div class="ab ab-d">⚠️ '+overEjes.length+' eje(s) exceden límite legal: '+overEjes.map(function(e){return e.label;}).join(', ')+'</div>';
+  }
+  if(!overPBV&&overEjes.length===0&&totalPesoCargado>0){
+    h+='<div class="ab ab-ok">✅ Pesos dentro de los límites legales (Res. 4100 INVIAS)</div>';
+  }
+
+  // FC APPLIED NOTICE
+  if(fcAplica&&pesoBascula>0){
+    h+='<div class="ab ab-ok" style="margin-bottom:10px;">✅ Factor de Corrección <strong class="mono">'+fcVal.toFixed(4)+'</strong> aplicado — pesos de ejes ajustados al peso real de báscula (<strong>'+pesoBascula.toLocaleString('es-CO')+' kg</strong>)</div>';
+  } else if(pesoBascula>0&&!fcAplica){
+    h+='<div class="ab ab-w" style="margin-bottom:10px;">⚠️ Factor de Corrección <strong class="mono">'+fcVal.toFixed(4)+'</strong> alejado de 1.0 — no se aplicó corrección. Se usan pesos originales de cada eje.</div>';
+  }
+
+  // KPI BANNER
+  h+='<div class="summary-banner">';
+  h+='<div class="sb-item"><div class="sb-val">'+totalPesoCargado.toLocaleString('es-CO')+'</div><div class="sb-lbl">Peso Total (kg)</div></div>';
+  h+='<div class="sb-div"></div>';
+  h+='<div class="sb-item"><div class="sb-val" style="color:'+(overPBV?'#fca5a5':'#86efac')+';">'+Math.abs(margenPBV).toLocaleString('es-CO')+'</div><div class="sb-lbl">'+(overPBV?'Exceso PBV':'Margen PBV')+'</div></div>';
+  h+='<div class="sb-div"></div>';
+  h+='<div class="sb-item"><div class="sb-val" style="color:var(--accent);">'+factorCorreccion+'</div><div class="sb-lbl">Factor Corr.</div></div>';
+  h+='<div class="sb-div"></div>';
+  h+='<div class="sb-item"><div class="sb-val" style="color:#93c5fd;">'+pbv.toLocaleString('es-CO')+'</div><div class="sb-lbl">PBV Max (kg)</div></div>';
+  h+='</div>';
+
+  // PBV BAR
+  h+='<div style="margin:10px 0 4px;display:flex;justify-content:space-between;align-items:center;"><span style="font-family:var(--ff-head);font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.4px;">USO PBV</span><span class="mono" style="font-size:12px;color:'+(overPBV?'#fca5a5':'#86efac')+';">'+pbvPct+'%</span></div>';
+  h+='<div class="prog-wrap"><div class="prog-fill '+pbvBarCls+'" style="width:'+Math.min(100,pbvPct)+'%;"></div></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-family:var(--ff-head);font-size:10px;color:var(--tx2);margin-top:3px;"><span>0</span><span>'+pbv.toLocaleString('es-CO')+' kg</span></div>';
+
+  // Distribución Dir/Trac
+  h+='<div class="kgrid" style="margin-top:12px;">';
+  h+='<div class="kpi"><div class="kn" style="font-size:18px;color:#93c5fd;">'+pctDir+'%</div><div class="kl">Distribución Dirección</div><div style="font-size:11px;color:var(--tx2);margin-top:3px;">'+pesoDir.toLocaleString('es-CO')+' kg</div></div>';
+  h+='<div class="kpi"><div class="kn" style="font-size:18px;color:#fcd34d;">'+pctTrac+'%</div><div class="kl">Distribución Tracción</div><div style="font-size:11px;color:var(--tx2);margin-top:3px;">'+pesoTrac.toLocaleString('es-CO')+' kg</div></div>';
+  h+='</div>';
+  h+='</div>';
+
+  // FACTOR DE CORRECCIÓN TABLE
+  h+='<div class="card">';
+  h+='<div class="ctitle">🔢 Factor de Corrección por Eje</div>';
+  h+='<div class="ab ab-i" style="margin-bottom:12px;font-size:11px;">FC = Peso Eje / Peso Total Equipo</div>';
+  h+='<table class="rtbl"><thead><tr><th>Eje</th><th style="text-align:right;">Peso Carg.</th><th style="text-align:right;">Factor Corr.</th><th style="text-align:right;">Dist. %</th><th>Lím. Eje</th></tr></thead><tbody>';
+  ejesResult.forEach(function(eje){
+    var barW=Math.min(100,eje.pctDist);
+    var limStatus=eje.overLimite?'d':eje.kg>(eje.limEje*0.9)?'w':'ok';
+    h+='<tr>';
+    h+='<td><strong>'+eje.label+'</strong></td>';
+    h+='<td style="text-align:right;" class="mono">'+eje.kg.toLocaleString('es-CO')+'</td>';
+    h+='<td style="text-align:right;" class="mono" style="color:var(--accent);">'+eje.factorCargado+'</td>';
+    h+='<td style="text-align:right;"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;"><span class="mono" style="font-size:11px;">'+eje.pctDist+'%</span><div style="width:40px;background:rgba(255,255,255,.08);border-radius:3px;height:5px;overflow:hidden;"><div style="height:5px;border-radius:3px;width:'+barW+'%;background:var(--accent2);"></div></div></div></td>';
+    h+='<td><span class="rb '+limStatus+'">'+(eje.overLimite?'⚠ EXCEDE':eje.limEje.toLocaleString('es-CO')+' kg')+'</span></td>';
+    h+='</tr>';
+  });
+  h+='<tr style="border-top:1.5px solid var(--bd2);"><td><strong>TOTAL</strong></td><td style="text-align:right;" class="mono"><strong>'+totalPesoCargado.toLocaleString('es-CO')+'</strong></td><td style="text-align:right;" class="mono" style="color:var(--accent);"><strong>'+factorCorreccion+'</strong></td><td style="text-align:right;" class="mono"><strong>100%</strong></td><td><span class="rb '+(overPBV?'d':'ok')+'">'+(overPBV?'⚠ PBV EXCEDIDO':'✓ OK')+'</span></td></tr>';
+  h+='</tbody></table></div>';
+
+  // DETALLE POR EJE
+  ejesResult.forEach(function(eje){
+    var hdrCls=eje.tipo==='dir'?'dir':eje.tipo==='aux'?'aux':eje.tipo==='rem'?'rem':'trac';
+    h+='<div class="eje-block">';
+    h+='<div class="eje-hdr '+hdrCls+'">';
+    h+='<span>'+eje.label+'</span>';
+    if(eje.dis)h+='<span style="font-size:11px;opacity:.8;">'+eje.dis+' · '+eje.dim+'</span>';
+    h+='</div>';
+    h+='<div class="eje-body">';
+
+    // Info chips
+    h+='<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;">';
+    if(eje.dim)h+='<span class="chip">📐 '+eje.dim+'</span>';
+    if(eje.cap)h+='<span class="chip">⚖️ Cap: '+eje.cap.toLocaleString('es-CO')+' kg</span>';
+    if(eje.maxPsi)h+='<span class="chip">🔵 Max PSI: '+eje.maxPsi+'</span>';
+    if(eje.iv)h+='<span class="chip">Índ.V: '+eje.iv+'</span>';
+    if(eje.dot)h+='<span class="chip">DOT: '+eje.dot+'</span>';
+    if(eje.prof)h+='<span class="chip">Huella: '+eje.prof+' mm</span>';
+    h+='</div>';
+
+    // Capacity status
+    if(eje.capEje){
+      var capCls=eje.diffCap>5?'ab-d':eje.diffCap>-5?'ab-w':'ab-ok';
+      var capIco=eje.diffCap>5?'⚠️':eje.diffCap>-5?'🟡':'✅';
+      h+='<div class="ab '+capCls+'" style="margin-bottom:9px;">';
+      h+=capIco+'<div>';
+      h+='<div>Carga eje: <strong>'+eje.kg.toLocaleString('es-CO')+' kg</strong> &nbsp;·&nbsp; Factor: <strong class="mono">'+eje.factorCargado+'</strong> &nbsp;·&nbsp; Dist: <strong>'+eje.pctDist+'%</strong></div>';
+      h+='<div>Cap. máx. eje: '+eje.capEje.toLocaleString('es-CO')+' kg &nbsp;·&nbsp; Uso: <strong>'+eje.pctCapacidad+'%</strong> ('+(eje.diffCap>0?'+':'')+eje.diffCap+'%)</div>';
+      h+='</div></div>';
+    }
+
+    // Positions table
+    h+='<div style="overflow-x:auto;"><table class="rtbl" style="margin-bottom:10px;min-width:420px;"><thead><tr><th>Posición</th><th style="text-align:right;">Peso (kg)</th><th style="text-align:right;">Carga/Llanta</th><th style="text-align:center;">PSI Encontrada</th><th style="text-align:center;">PSI Recomendada</th><th style="text-align:right;">Cap. Máx.</th></tr></thead><tbody>';
+    eje.posiciones.forEach(function(p){
+      var psiTxt='—';var psiStyle='';
+      if(p.psiRec){
+        if(p.psiRec>eje.maxPsi){psiTxt='<span style="color:#fca5a5;font-weight:700;font-size:11px;">⚠ > PSI Fábrica</span>';}
+        else{
+          psiTxt='<span class="mono" style="color:'+(p.psiStatus==='ok'?'#86efac':p.psiStatus==='over'?'#fca5a5':'#fcd34d')+';font-weight:700;">'+p.psiRec+'</span>';
+        }
+      }
+      var noCumpleStyle=p.noCumpleCapacidad?'background:rgba(220,38,38,.1);':'';
+      h+='<tr style="'+noCumpleStyle+'">';
+      h+='<td><strong>'+p.pos+'</strong>'+(p.noCumpleCapacidad?'<span style="margin-left:5px;background:rgba(220,38,38,.2);color:#fca5a5;font-family:var(--ff-head);font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px;letter-spacing:.3px;">NO CUMPLE</span>':'')+'</td>';
+      h+='<td style="text-align:right;" class="mono">'+(eje.fcAplicado?'<span style="color:#86efac;">'+p.kg.toLocaleString('es-CO')+'</span>':p.kg.toLocaleString('es-CO'))+'</td>';
+      h+='<td style="text-align:right;" class="mono'+(p.noCumpleCapacidad?' psi-over':'')+'">'+(p.cargaLlanta?p.cargaLlanta.toLocaleString('es-CO')+' kg':'—')+'</td>';
+      h+='<td style="text-align:center;" class="mono" style="font-weight:700;">'+(p.psif||'—')+'</td>';
+      h+='<td style="text-align:center;">'+psiTxt+'</td>';
+      h+='<td style="text-align:right;" class="mono">'+(p.capMax?'<span style="color:'+(p.noCumpleCapacidad?'#fca5a5':'var(--tx2)')+';">'+p.capMax.toLocaleString('es-CO')+' kg</span>':'—')+'</td>';
+      h+='</tr>';
+      // NO CUMPLE row
+      if(p.noCumpleCapacidad){
+        h+='<tr style="background:rgba(220,38,38,.07);"><td colspan="6" style="padding:7px 10px;">';
+        h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">';
+        h+='<span style="font-size:16px;">🚨</span>';
+        h+='<div style="font-family:var(--ff-head);font-size:12px;color:#fca5a5;font-weight:800;letter-spacing:.3px;">NO CUMPLE — EXCEDE CAPACIDAD DE CARGA</div>';
+        h+='<div style="font-size:11px;color:#fca5a5;">Carga llanta: <strong>'+p.cargaLlanta.toLocaleString('es-CO')+' kg</strong> &nbsp;·&nbsp; Cap. máx.: <strong>'+eje.cap.toLocaleString('es-CO')+' kg</strong> &nbsp;·&nbsp; Exceso: <strong>+'+p.excesoCap.toLocaleString('es-CO')+' kg (+'+p.pctSobreCap+'%)</strong></div>';
+        h+='<div style="font-size:11px;color:rgba(252,165,165,.7);">La llanta no tiene la capacidad de carga suficiente para este pesaje. Requiere llanta de mayor índice de carga.</div>';
+        h+='</div></td></tr>';
+      }
+    });
+    h+='</tbody></table></div>';
+
+    // PSI Rec box
+    if(eje.posiciones[0]&&eje.posiciones[0].psiRec){
+      var recPsi=eje.posiciones[0].psiRec;
+      var isOver=recPsi>eje.maxPsi;
+      h+='<div style="background:'+(isOver?'rgba(220,38,38,.1)':'rgba(37,99,168,.12)')+';border:1px solid '+(isOver?'rgba(220,38,38,.3)':'rgba(37,99,168,.3)')+';border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">';
+      h+='<div><div style="font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px;">Presión Recomendada</div>';
+      h+='<div style="font-family:var(--ff-head);font-size:10px;color:var(--tx2);">Basada en carga por llanta / cap. single</div></div>';
+      h+='<div class="mono" style="font-size:26px;font-weight:900;color:'+(isOver?'#fca5a5':'#93c5fd')+';">'+(isOver?'> '+eje.maxPsi:recPsi)+'</div>';
+      h+='<div style="font-family:var(--ff-head);font-size:11px;font-weight:700;color:var(--tx2);">PSI</div>';
+      h+='</div>';
+    }
+    h+='</div></div>';
+  });
+
+  // OBSERVACIONES
+  h+='<div class="card">';
+  h+='<div class="ctitle">📝 Observaciones y Recomendaciones</div>';
+  var obsCount=0;
+  ejesResult.forEach(function(eje){
+    var psiOver=eje.posiciones.some(function(p){return p.psiRec&&eje.maxPsi&&p.psiRec>eje.maxPsi;});
+    if(psiOver){
+      obsCount++;
+      h+='<div class="analysis-block danger">';
+      h+='<div class="analysis-title">⚠️ '+eje.label+' — Presión supera máximo de fábrica</div>';
+      h+='<div class="analysis-text">La presión de cálculo obtenida supera la presión máxima permitida por el fabricante. La llanta opera al límite de su capacidad.<br>';
+      h+='<strong>Recomendaciones:</strong><br>• Cambio de dimensión de llanta &nbsp;·&nbsp; • Redistribución de carga &nbsp;·&nbsp; • Aumento de capacidad del neumático</div>';
+      h+='</div>';
+    }
+    if(eje.tipo==='trac'&&eje.posiciones.length>=2){
+      var p0=eje.posiciones[0],p1=eje.posiciones[1];
+      var difKg=Math.abs(p0.kg-p1.kg);
+      var difPorLlanta=Math.round(difKg/(eje.llantas/2));
+      if(difPorLlanta>200){
+        obsCount++;
+        var pctDif=p0.cargaLlanta>0?Math.round((difPorLlanta/p0.cargaLlanta)*100):0;
+        h+='<div class="analysis-block warn">';
+        h+='<div class="analysis-title">🟡 '+eje.label+' — Desbalance entre posiciones</div>';
+        h+='<div class="analysis-text">';
+        eje.posiciones.forEach(function(p){
+          h+=p.pos+': '+p.kg.toLocaleString('es-CO')+' / '+(eje.llantas/2)+' = <strong>'+p.cargaLlanta.toLocaleString('es-CO')+' kg</strong> por llanta<br>';
+        });
+        h+='Diferencia: <strong>'+difKg.toLocaleString('es-CO')+' kg</strong> por eje &nbsp;·&nbsp; <strong>'+difPorLlanta.toLocaleString('es-CO')+' kg</strong> por llanta<br>';
+        h+='Desgaste potencial aprox. <strong>'+pctDif+'% mayor</strong> en posición más cargada.<br>';
+        h+='• Rotación recomendada: cada <strong>12.000–15.000 km</strong> en carretera &nbsp;|&nbsp; <strong>8.000–10.000 km</strong> en cantera</div>';
+        h+='</div>';
+      } else if(p0.kg>0){
+        h+='<div class="analysis-block ok">';
+        h+='<div class="analysis-title">✅ '+eje.label+' — Tándem bien balanceado</div>';
+        h+='<div class="analysis-text">Distribución uniforme entre posiciones. No se detecta desbalance significativo.</div></div>';
+      }
+    }
+    if(eje.tipo==='dir'&&eje.prof>0&&eje.prof<4){
+      obsCount++;
+      h+='<div class="analysis-block warn">';
+      h+='<div class="analysis-title">🟡 '+eje.label+' — Profundidad de huella baja</div>';
+      h+='<div class="analysis-text">Profundidad medida: <strong>'+eje.prof+' mm</strong>. Mínimo legal: <strong>4 mm</strong> (eje dirección). Programar reencauche o reemplazo.</div>';
+      h+='</div>';
+    }
+  });
+  if(obsCount===0&&totalPesoCargado>0){
+    h+='<div class="analysis-block ok"><div class="analysis-title">✅ Sin novedades críticas</div>';
+    h+='<div class="analysis-text">Los parámetros de este análisis se encuentran dentro de los rangos aceptables.</div></div>';
+  }
+  h+='</div>';
+
+  document.getElementById('analisisContainer').innerHTML=h;
+  window._lastAnalysis={ejes:ejesResult,totalPeso:totalPesoCargado,factorCorreccion:factorCorreccion,pctDir:pctDir,pctTrac:pctTrac,pbv:pbv,overPBV:overPBV};
+}
+
+// ════════════════════════════════════════
+//   GUARDAR REGISTRO
+// ════════════════════════════════════════
+function guardarRegistro(){
+  if(!window._lastAnalysis){alert('Primero calcula el análisis.');return;}
+  var rec={
+    id:Date.now(),
+    placa:gv('v_placa').toUpperCase(),
+    marca:gv('v_marca'),
+    config:gv('v_config'),
+    tipo:gv('v_tipo'),
+    estado:gv('v_estado'),
+    carga:gv('v_carga'),
+    empresa:gv('v_empresa'),
+    analista:gv('v_analista'),
+    fecha:gv('v_fecha'),
+    bascula:gv('v_bascula'),
+    km:gv('v_km'),
+    obs:gv('v_obs'),
+    analysis:window._lastAnalysis,
+    photos:Object.assign({},currentPhotos),
+    savedAt:new Date().toLocaleString('es-CO')
+  };
+  records.push(rec);
+  saveToStorage();
+  document.getElementById('histBadge').textContent='📋 '+records.length+' registros';
+  toast('✅ Registro guardado: '+rec.placa);
+  goTab(4);
+}
+
+// ════════════════════════════════════════
+//   PHOTOS
+// ════════════════════════════════════════
+function triggerPhoto(id){document.getElementById(id).click();}
+function handlePhoto(slotId,input,key){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    currentPhotos[key]=e.target.result;
+    var slot=document.getElementById(slotId);
+    var ov=slot.querySelector('.ps-ov');
+    var exImg=slot.querySelector('img');if(exImg)exImg.remove();
+    var img=document.createElement('img');
+    img.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+    img.src=e.target.result;
+    slot.appendChild(img);
+    if(ov)ov.style.display='none';
+    slot.classList.add('has-p');
+    var exBtn=slot.querySelector('.ps-ret');if(exBtn)exBtn.remove();
+    var btn=document.createElement('button');btn.className='ps-ret';btn.textContent='Retomar';
+    btn.onclick=function(ev){ev.stopPropagation();if(ov)ov.style.display='flex';img.remove();btn.remove();slot.classList.remove('has-p');delete currentPhotos[key];};
+    slot.appendChild(btn);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ════════════════════════════════════════
+//   HISTORIAL
+// ════════════════════════════════════════
+function buildHistorial(){
+  var query=(gv('histSearch')||'').toLowerCase();
+  var filtered=records.filter(function(r){
+    if(!query)return true;
+    return (r.placa||'').toLowerCase().includes(query)||(r.empresa||'').toLowerCase().includes(query)||(r.analista||'').toLowerCase().includes(query)||(r.config||'').toLowerCase().includes(query);
+  });
+  if(!filtered.length){
+    document.getElementById('histList').innerHTML='<div class="empty"><div class="ei">📭</div><p>'+(query?'Sin resultados para "'+query+'"':'Sin registros guardados')+'</p></div>';
+    return;
+  }
+  var h='';
+  filtered.slice().reverse().forEach(function(r){
+    var a=r.analysis;
+    var overDir=a.ejes.filter(function(e){return (e.tipo==='dir'||e.tipo==='aux')&&e.posiciones.some(function(p){return p.psiRec&&p.psiRec>e.maxPsi;});}).length;
+    var desbal=a.ejes.filter(function(e){return e.tipo==='trac'&&e.posiciones.length>=2&&Math.abs(e.posiciones[0].kg-e.posiciones[1].kg)/(e.llantas/2)>200;}).length;
+    var sc=overDir>0?'d':desbal>0?'w':'ok';
+    var sl=overDir>0?'PSI EXCEDIDA':desbal>0?'DESBALANCE':'SIN NOVEDAD';
+    h+='<div class="hist-item" onclick="showDetail('+r.id+')">';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">';
+    h+='<span class="hist-placa">'+r.placa+'</span>';
+    h+='<span class="tag '+sc+'">'+sl+'</span></div>';
+    h+='<div class="hist-meta">'+r.config+(r.tipo?' · '+r.tipo:'')+(r.marca?' · '+r.marca:'')+(r.empresa?' · '+r.empresa:'')+'</div>';
+    h+='<div class="hist-meta">'+r.fecha+(r.bascula?' · '+r.bascula:'')+(r.analista?' · '+r.analista:'')+'</div>';
+    h+='<div class="tags">';
+    h+='<span class="tag i">'+a.totalPeso.toLocaleString('es-CO')+' kg</span>';
+    h+='<span class="tag g">FC: '+a.factorCorreccion+'</span>';
+    h+='<span class="tag g">Dir: '+a.pctDir+'% / Trac: '+a.pctTrac+'%</span>';
+    if(r.carga)h+='<span class="tag g">'+r.carga+'</span>';
+    if(r.km)h+='<span class="tag g">'+parseInt(r.km).toLocaleString('es-CO')+' km</span>';
+    h+='</div></div>';
+  });
+  document.getElementById('histList').innerHTML=h;
+}
+
+function showDetail(id){
+  var r=records.find(function(x){return x.id===id;});if(!r)return;
+  var a=r.analysis;
+  var h='';
+  h+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">';
+  h+='<div><div style="font-family:var(--ff-head);font-size:20px;font-weight:900;color:var(--tx);">'+r.placa+'</div>';
+  h+='<div style="font-size:12px;color:var(--tx2);">'+r.config+(r.tipo?' · '+r.tipo:'')+(r.marca?' · '+r.marca:'')+'</div></div>';
+  h+='<span class="chip">'+r.savedAt+'</span></div>';
+  h+='<div class="kgrid" style="margin-bottom:12px;">';
+  [['Empresa',r.empresa||'—'],['Analista',r.analista||'—'],['Fecha',r.fecha],['Báscula',r.bascula||'—'],['Estado',r.estado],['Carga',r.carga||'—'],['Peso Total',a.totalPeso.toLocaleString('es-CO')+' kg'],['Factor Corrección',a.factorCorreccion]].forEach(function(f){
+    h+='<div class="kpi" style="text-align:left;padding:10px 12px;"><div style="font-family:var(--ff-head);font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'+f[0]+'</div><div style="font-family:var(--ff-mono);font-size:13px;font-weight:700;color:var(--tx);">'+f[1]+'</div></div>';
+  });
+  h+='</div>';
+  h+='<table class="rtbl" style="margin-bottom:14px;"><thead><tr><th>Eje</th><th style="text-align:right;">Peso (kg)</th><th style="text-align:right;">Factor</th><th style="text-align:right;">Dist. %</th><th style="text-align:center;">PSI Rec.</th></tr></thead><tbody>';
+  a.ejes.forEach(function(eje){
+    var psiRec=eje.posiciones.length>0&&eje.posiciones[0].psiRec?eje.posiciones[0].psiRec:'—';
+    var isOver=eje.posiciones.length>0&&eje.posiciones[0].psiRec&&eje.posiciones[0].psiRec>eje.maxPsi;
+    h+='<tr><td><strong>'+eje.label+'</strong></td><td style="text-align:right;" class="mono">'+eje.kg.toLocaleString('es-CO')+'</td><td style="text-align:right;" class="mono" style="color:var(--accent);">'+eje.factorCargado+'</td><td style="text-align:right;" class="mono">'+eje.pctDist+'%</td><td style="text-align:center;">'+(isOver?'<span style="color:#fca5a5;font-family:var(--ff-head);font-size:11px;font-weight:800;">⚠ > Fábrica</span>':'<span class="mono" style="font-weight:700;color:#93c5fd;">'+psiRec+'</span>')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  // Photos
+  // Build dynamic bascula eje keys
+  var cfg2=r.config;
+  var ejeBasKeys=[];
+  if(cfg2&&CONFIGS[cfg2]){CONFIGS[cfg2].axles.forEach(function(eje){ejeBasKeys.push('bas_'+eje.id);});}
+  var photoKeys=['frente','atras','lado_izq','lado_der','llanta_dir','llanta_trac','dim','extra'].concat(ejeBasKeys);
+  var photoLabels={frente:'Frente',atras:'Atrás',lado_izq:'Lado Izq.',lado_der:'Lado Der.',llanta_dir:'Llanta Dir.',llanta_trac:'Llanta Trac.',dim:'Dimensión',extra:'Adicional'};
+  CONFIGS[cfg2]&&CONFIGS[cfg2].axles.forEach(function(eje){photoLabels['bas_'+eje.id]='Básc. '+eje.label;});
+  var hasP=photoKeys.filter(function(k){return r.photos&&r.photos[k];});
+  if(hasP.length){
+    h+='<div class="sec-label">Fotos de Evidencia</div>';
+    h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">';
+    hasP.forEach(function(k){
+      h+='<div style="border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:var(--sur2);border:1px solid var(--bd2);position:relative;">';
+      h+='<img src="'+r.photos[k]+'" style="width:100%;height:100%;object-fit:cover;">';
+      h+='<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;font-family:var(--ff-head);font-size:9px;font-weight:700;text-align:center;padding:4px;letter-spacing:.3px;">'+photoLabels[k]+'</div></div>';
+    });
+    h+='</div>';
+  }
+  // Obs
+  if(r.obs){h+='<div class="ab ab-i">📝 '+r.obs+'</div>';}
+  h+='<div style="display:flex;gap:8px;margin-top:12px;">';
+  h+='<button onclick="deleteRecord('+r.id+');closeDetail();" style="flex:1;padding:10px;background:rgba(220,38,38,.1);color:#fca5a5;border:1px solid rgba(220,38,38,.25);border-radius:8px;font-family:var(--ff-head);font-size:13px;font-weight:800;cursor:pointer;letter-spacing:.3px;">🗑 Eliminar</button>';
+  h+='</div>';
+  document.getElementById('detailBody').innerHTML=h;
+  document.getElementById('detailOv').classList.add('open');
+}
+
+function closeDetail(){document.getElementById('detailOv').classList.remove('open');}
+
+function deleteRecord(id){
+  records=records.filter(function(r){return r.id!==id;});
+  saveToStorage();
+  document.getElementById('histBadge').textContent='📋 '+records.length+' registros';
+  buildHistorial();
+  toast('Registro eliminado');
+}
+
+function clearAll(){
+  records=[];saveToStorage();
+  document.getElementById('histBadge').textContent='📋 0 registros';
+  buildHistorial();
+  buildReportTab();
+  toast('Historial limpiado');
+}
+
+// ════════════════════════════════════════
+//   REPORTE
+// ════════════════════════════════════════
+function buildReportTab(){
+  if(!records.length){document.getElementById('reportContainer').innerHTML='<div class="empty"><div class="ei">📊</div><p>Sin datos para reportar</p></div>';return;}
+  var total=records.length;
+  var overPsi=records.filter(function(r){return r.analysis.ejes.some(function(e){return e.posiciones.some(function(p){return p.psiRec&&p.psiRec>e.maxPsi;});});}).length;
+  var desbal=records.filter(function(r){return r.analysis.ejes.some(function(e){return e.tipo==='trac'&&e.posiciones.length>=2&&Math.abs(e.posiciones[0].kg-e.posiciones[1].kg)/(e.llantas/2)>200;});}).length;
+  var overPBV=records.filter(function(r){return r.analysis.overPBV;}).length;
+  var ok=total-overPsi-desbal;
+  var avgFC=Math.round(records.reduce(function(s,r){return s+r.analysis.factorCorreccion;},0)/total*1000)/1000;
+  var totalKg=records.reduce(function(s,r){return s+r.analysis.totalPeso;},0);
+
+  var h='<div class="rep-cover">';
+  h+='<div class="rep-title-area"><h2>Reporte de Análisis</h2><p>'+new Date().toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</p></div>';
+  h+='<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+  h+='<span class="chip">'+total+' análisis</span>';
+  if(overPBV)h+='<span class="chip" style="color:#fca5a5;border-color:rgba(220,38,38,.3);">⚠ '+overPBV+' PBV excedidos</span>';
+  h+='</div></div>';
+
+  h+='<div class="kgrid" style="grid-template-columns:repeat(2,1fr);">';
+  h+='<div class="kpi"><div class="kn">'+total+'</div><div class="kl">Total Análisis</div></div>';
+  h+='<div class="kpi"><div class="kn" style="color:#fca5a5;">'+overPsi+'</div><div class="kl">PSI Excedida</div></div>';
+  h+='<div class="kpi"><div class="kn" style="color:#fcd34d;">'+desbal+'</div><div class="kl">Desbalance Eje</div></div>';
+  h+='<div class="kpi"><div class="kn" style="color:#86efac;">'+ok+'</div><div class="kl">Sin Novedad</div></div>';
+  h+='<div class="kpi"><div class="kn" style="font-size:18px;">'+totalKg.toLocaleString('es-CO')+' kg</div><div class="kl">Peso Total Acumulado</div></div>';
+  h+='<div class="kpi"><div class="kn" style="color:var(--accent);">'+avgFC+'</div><div class="kl">FC Promedio</div></div>';
+  h+='</div>';
+
+  h+='<div class="card"><div class="ctitle">📋 Registro de Análisis</div>';
+  h+='<div style="overflow-x:auto;"><table class="rtbl" style="min-width:600px;"><thead><tr><th>Placa</th><th>Config.</th><th>Empresa</th><th>Fecha</th><th style="text-align:right;">Peso Total</th><th style="text-align:right;">FC</th><th style="text-align:center;">Dir%/Trac%</th><th>Estado</th></tr></thead><tbody>';
+  records.forEach(function(r){
+    var a=r.analysis;
+    var isOver=a.ejes.some(function(e){return e.posiciones.some(function(p){return p.psiRec&&p.psiRec>e.maxPsi;});});
+    var isDesbal=a.ejes.some(function(e){return e.tipo==='trac'&&e.posiciones.length>=2&&Math.abs(e.posiciones[0].kg-e.posiciones[1].kg)/(e.llantas/2)>200;});
+    var sc=isOver?'d':isDesbal?'w':'ok';
+    var sl=isOver?'PSI Excedida':isDesbal?'Desbalance':'OK';
+    h+='<tr><td><strong>'+r.placa+'</strong></td><td style="font-size:11px;">'+r.config+'</td><td style="font-size:11px;">'+(r.empresa||'—')+'</td><td style="font-size:11px;">'+r.fecha+'</td><td style="text-align:right;" class="mono"><strong>'+a.totalPeso.toLocaleString('es-CO')+' kg</strong></td><td style="text-align:right;" class="mono">'+a.factorCorreccion+'</td><td style="text-align:center;font-size:11px;">'+a.pctDir+'%/'+a.pctTrac+'%</td><td><span class="rb '+sc+'">'+sl+'</span></td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+  document.getElementById('reportContainer').innerHTML=h;
+}
+
+// ════════════════════════════════════════
+//   EXPORT CSV
+// ════════════════════════════════════════
+function exportCSV(){
+  if(!records.length){alert('Sin registros.');return;}
+  var rows=[
+    ['ANÁLISIS PRESIÓN INFLADO EJES — REDLLANTAS'],
+    ['Generado:',new Date().toLocaleString('es-CO')],
+    [],
+    ['Placa','Marca','Config.','Tipología','Estado','Carga','Empresa','Analista','Fecha','Báscula','Km','Peso Total(kg)','Factor Corrección','Dist.Dir(%)','Dist.Trac(%)','PBV Max','Excede PBV']
+  ];
+  records.forEach(function(r){
+    var a=r.analysis;
+    rows.push([r.placa,r.marca||'',r.config,r.tipo||'',r.estado,r.carga||'',r.empresa||'',r.analista||'',r.fecha,r.bascula||'',r.km||'',a.totalPeso,a.factorCorreccion,a.pctDir,a.pctTrac,a.pbv||'',a.overPBV?'SI':'NO']);
+    rows.push(['--- EJES ---']);
+    rows.push(['Eje','Tipo','Peso(kg)','Factor','Dist%','Diseño','Dimensión','Cap.Single','MaxPSI','Profundidad Huella']);
+    a.ejes.forEach(function(e){rows.push([e.label,e.tipo,e.kg,e.factorCargado,e.pctDist+'%',e.dis||'',e.dim||'',e.cap||'',e.maxPsi||'',e.prof||'']);});
+    rows.push(['--- POSICIONES ---']);
+    rows.push(['Eje','Posición','Peso(kg)','Carga/Llanta','PSI Encontrada','PSI Recomendada','Cap.Máx.']);
+    a.ejes.forEach(function(e){e.posiciones.forEach(function(p){rows.push([e.label,p.pos,p.kg,p.cargaLlanta||'',p.psif||'',p.psiRec>e.maxPsi?'> Max Fábrica':p.psiRec||'',p.capMax||'']);});});
+    rows.push([]);
+  });
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;
+  a.download='PesoEje_Analisis_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  toast('⬇ CSV descargado');
+}
+
+// ════════════════════════════════════════
+//   EXPORT HTML REPORT
+// ════════════════════════════════════════
+function exportHTMLReport(){
+  if(!records.length){alert('Sin registros.');return;}
+  var overPsi=records.filter(function(r){return r.analysis.ejes.some(function(e){return e.posiciones.some(function(p){return p.psiRec&&p.psiRec>e.maxPsi;});});}).length;
+  var rows='';
+  records.forEach(function(r){
+    var a=r.analysis;
+    var isOver=a.ejes.some(function(e){return e.posiciones.some(function(p){return p.psiRec&&p.psiRec>e.maxPsi;});});
+    var sc=isOver?'background:#fee2e2;color:#991b1b':'background:#d1fae5;color:#065f46';
+    rows+='<tr><td style="padding:8px;font-weight:700;color:#1a3a5c;font-family:monospace;">'+r.placa+'</td><td style="padding:8px;font-size:11px;">'+r.config+'</td><td style="padding:8px;font-size:11px;">'+(r.empresa||'—')+'</td><td style="padding:8px;font-size:11px;">'+r.fecha+'</td><td style="padding:8px;text-align:right;font-weight:700;font-family:monospace;">'+a.totalPeso.toLocaleString('es-CO')+' kg</td><td style="padding:8px;text-align:right;font-family:monospace;">'+a.factorCorreccion+'</td><td style="padding:8px;text-align:center;">'+a.pctDir+'% / '+a.pctTrac+'%</td><td style="padding:8px;text-align:center;"><span style="'+sc+';padding:2px 9px;border-radius:8px;font-size:11px;font-weight:700;">'+(isOver?'PSI Excedida':'OK')+'</span></td></tr>';
+  });
+  var avg=Math.round(records.reduce(function(s,r){return s+r.analysis.factorCorreccion;},0)/records.length*1000)/1000;
+  var totalKg=records.reduce(function(s,r){return s+r.analysis.totalPeso;},0);
+  var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>PesoEje Pro — Análisis RedLlantas</title>';
+  html+='<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">';
+  html+='<style>body{font-family:Barlow,sans-serif;margin:0;background:#f0f4f8;color:#0f172a;}h1,h2,h3,h4{font-family:"Barlow Condensed",sans-serif;}.cover{background:linear-gradient(135deg,#0f1c2e,#1a3a5c);color:#fff;padding:28px 24px;}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px;background:#fff;border-bottom:1px solid #e2e8f0;}.kpi{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;}.kn{font-family:"Barlow Condensed",sans-serif;font-size:24px;font-weight:900;color:#1a3a5c;letter-spacing:-1px;}.kl{font-family:"Barlow Condensed",sans-serif;font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-top:2px;}.section{background:#fff;margin:12px;border-radius:10px;overflow:hidden;box-shadow:0 1px 8px rgba(0,0,0,.06);}.sh{background:#1a3a5c;color:#fff;padding:10px 16px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:14px;letter-spacing:.5px;text-transform:uppercase;}.sb{padding:0;overflow-x:auto;}table{width:100%;border-collapse:collapse;font-size:12px;}th{background:#1a3a5c;color:rgba(255,255,255,.75);padding:8px 9px;text-align:left;font-family:"Barlow Condensed",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;}td{padding:7px 9px;border-bottom:1px solid #e2e8f0;}tr:nth-child(even) td{background:#f8fafc;}.footer{text-align:center;padding:16px;font-size:11px;color:#94a3b8;background:#fff;margin:12px;border-radius:10px;}</style></head><body>';
+  html+='<div class="cover"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div style="background:#fff;border-radius:8px;padding:5px 14px;display:inline-flex;align-items:center;"><div style="width:20px;height:20px;border:3.5px solid #cc0000;border-radius:50%;margin-right:3px;"></div><span style="color:#cc0000;font-family:Arial Black,sans-serif;font-size:18px;font-weight:900;">Red</span><span style="color:#111;font-family:Arial Black,sans-serif;font-size:18px;font-weight:900;">llantas</span></div><div style="border-left:1px solid rgba(255,255,255,.25);padding-left:12px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:9px;color:#fbbf24;font-weight:800;text-transform:uppercase;letter-spacing:1px;">Análisis Presión de Inflado por Ejes de Carga</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:-.5px;">PesoEje Pro</div></div></div><p style="margin:0;font-size:12px;opacity:.55;font-family:\'Barlow\',sans-serif;">Generado: '+new Date().toLocaleString('es-CO')+'</p></div>';
+  html+='<div class="kpis"><div class="kpi"><div class="kn">'+records.length+'</div><div class="kl">Análisis</div></div><div class="kpi"><div class="kn" style="color:#dc2626;">'+overPsi+'</div><div class="kl">PSI Excedida</div></div><div class="kpi"><div class="kn">'+totalKg.toLocaleString('es-CO')+'</div><div class="kl">Peso Total (kg)</div></div><div class="kpi"><div class="kn">'+avg+'</div><div class="kl">FC Promedio</div></div></div>';
+  html+='<div class="section"><div class="sh">📋 Registro de Análisis</div><div class="sb"><table><thead><tr><th>Placa</th><th>Config.</th><th>Empresa</th><th>Fecha</th><th>Peso Total</th><th>FC</th><th>Dir%/Trac%</th><th>Estado</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  html+='<div class="footer">PesoEje Pro · RedLlantas · Soporte Técnico a Flotas Vehiculares · flotasbog1@redllantas.com &nbsp;|&nbsp; <strong>SmartTire IA.Xpta</strong></div></body></html>';
+  var blob=new Blob([html],{type:'text/html;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;
+  a.download='PesoEje_Reporte_'+new Date().toISOString().split('T')[0]+'.html';
+  a.click();URL.revokeObjectURL(url);
+  toast('📄 Reporte descargado');
+}
+
+// ════════════════════════════════════════
+//   LOCAL STORAGE
+// ════════════════════════════════════════
+function saveToStorage(){
+  try{
+    var toSave=records.map(function(r){return Object.assign({},r,{photos:{}})}); // strip photos for storage
+    localStorage.setItem('pesoeje_records',JSON.stringify(toSave));
+  }catch(e){}
+}
+function loadFromStorage(){
+  try{
+    var stored=localStorage.getItem('pesoeje_records');
+    if(stored){
+      records=JSON.parse(stored);
+      document.getElementById('histBadge').textContent='📋 '+records.length+' registros';
+    }
+  }catch(e){}
+}
+
+// ════════════════════════════════════════
+//   BÁSCULA FOTOS POR EJE (dinámico)
+// ════════════════════════════════════════
+function buildBasculaEjes(){
+  var cfg=gv('v_config');
+  var cont=document.getElementById('basicaEjesContainer');
+  if(!cont)return;
+  if(!cfg||!CONFIGS[cfg]){
+    cont.innerHTML='<div class="empty"><div class="ei">⚖️</div><p>Selecciona la configuración del vehículo primero</p></div>';
+    return;
+  }
+  var axles=CONFIGS[cfg].axles;
+  cont.innerHTML='';
+  var wrap=document.createElement('div');
+  wrap.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;';
+  axles.forEach(function(eje){
+    var key='bas_'+eje.id;
+    var slotId='ps_'+key;
+    var inputId='ph_'+key;
+    var hdrColor=eje.tipo==='dir'?'#93c5fd':eje.tipo==='aux'?'#d8b4fe':eje.tipo==='rem'?'#6ee7b7':'#fcd34d';
+    var kgEl=document.getElementById('eje_kg_'+eje.id);
+    var kgVal=kgEl?kgEl.value:'';
+    var cell=document.createElement('div');
+    // Header
+    var hdr=document.createElement('div');
+    hdr.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 10px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;';
+    var ejeLbl=document.createElement('span');
+    ejeLbl.style.cssText='font-family:var(--ff-head);font-size:12px;font-weight:800;color:'+hdrColor+';';
+    ejeLbl.textContent=eje.label;
+    var kgSpan=document.createElement('span');
+    if(kgVal){kgSpan.style.cssText='font-family:var(--ff-mono);font-size:12px;font-weight:700;color:'+hdrColor+';';kgSpan.textContent=parseFloat(kgVal).toLocaleString('es-CO')+' kg';}
+    else{kgSpan.style.cssText='font-size:11px;color:var(--tx2);';kgSpan.textContent='Sin peso ingresado';}
+    hdr.appendChild(ejeLbl);hdr.appendChild(kgSpan);
+    cell.appendChild(hdr);
+    // Slot
+    var slot=document.createElement('div');
+    slot.className='photo-slot'+(currentPhotos[key]?' has-p':'');
+    slot.id=slotId;
+    slot.style.position='relative';
+    if(currentPhotos[key]){slot.style.borderStyle='solid';slot.style.borderColor='var(--p5)';}
+    (function(iid){slot.onclick=function(){document.getElementById(iid).click();};})(inputId);
+    if(currentPhotos[key]){
+      var img=document.createElement('img');
+      img.src=currentPhotos[key];
+      img.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+      slot.appendChild(img);
+      var retBtn=document.createElement('button');
+      retBtn.className='ps-ret';retBtn.textContent='Retomar';
+      (function(sid,k){retBtn.onclick=function(ev){ev.stopPropagation();retakePhoto(sid,k);};})(slotId,key);
+      slot.appendChild(retBtn);
+    } else {
+      var ov=document.createElement('div');ov.className='ps-ov';
+      var ico=document.createElement('span');ico.className='ps-ico';ico.textContent='⚖️';
+      var lbl2=document.createElement('span');lbl2.className='ps-lbl';lbl2.textContent='Báscula '+eje.label;
+      ov.appendChild(ico);ov.appendChild(lbl2);slot.appendChild(ov);
+    }
+    cell.appendChild(slot);
+    var lbl=document.createElement('div');lbl.className='photo-lbl';lbl.textContent='Báscula · '+eje.label;
+    cell.appendChild(lbl);
+    var inp=document.createElement('input');
+    inp.type='file';inp.id=inputId;inp.accept='image/*';inp.setAttribute('capture','environment');
+    inp.style.display='none';
+    (function(sid,k){inp.onchange=function(){handlePhoto(sid,this,k);};})(slotId,key);
+    cell.appendChild(inp);
+    wrap.appendChild(cell);
+  });
+  cont.appendChild(wrap);
+}
+function retakePhoto(slotId,key){
+  delete currentPhotos[key];
+  var slot=document.getElementById(slotId);
+  if(slot){
+    slot.classList.remove('has-p');
+    var img=slot.querySelector('img');if(img)img.remove();
+    var btn=slot.querySelector('.ps-ret');if(btn)btn.remove();
+    var ov=slot.querySelector('.ps-ov');
+    if(!ov){
+      // rebuild ov
+      var label=key.startsWith('bas_')?'Báscula':'Foto';
+      slot.innerHTML='<div class="ps-ov"><span class="ps-ico">⚖️</span><span class="ps-lbl">'+label+'</span></div>';
+    } else {
+      ov.style.display='flex';
+    }
+  }
+}
+
+// ════════════════════════════════════════
+//   DISTANCIAS EJES & CENTRO DE GRAVEDAD
+// ════════════════════════════════════════
+function buildDistEjes(){
+  var cfg=gv('v_config');
+  var cont=document.getElementById('distEjesContainer');
+  if(!cont)return;
+  if(!cfg||!CONFIGS[cfg]){
+    cont.innerHTML='<div class="empty" style="padding:16px;"><div class="ei" style="font-size:24px;">📐</div><p>Selecciona la configuración del vehículo</p></div>';
+    return;
+  }
+  var axles=CONFIGS[cfg].axles;
+  var h='<div style="display:grid;gap:8px;">';
+  axles.forEach(function(eje,i){
+    var hdrColor=eje.tipo==='dir'?'#93c5fd':eje.tipo==='aux'?'#d8b4fe':eje.tipo==='rem'?'#6ee7b7':'#fcd34d';
+    h+='<div style="background:var(--sur2);border:1px solid var(--bd2);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;">';
+    h+='<div style="width:8px;height:8px;border-radius:50%;background:'+hdrColor+';flex-shrink:0;"></div>';
+    h+='<div style="flex:1;font-family:var(--ff-head);font-size:12px;font-weight:800;color:'+hdrColor+';">'+eje.label+'</div>';
+    if(i===0){
+      h+='<div style="font-family:var(--ff-mono);font-size:12px;color:var(--tx2);background:rgba(255,255,255,.04);padding:5px 10px;border-radius:6px;border:1px solid var(--bd2);">Origen = 0.00 m</div>';
+    } else {
+      h+='<div class="fg" style="flex:none;width:160px;">';
+      h+='<label class="fl">Distancia al Eje Delant. (m)</label>';
+      h+='<input type="number" id="dist_eje_'+eje.id+'" placeholder="ej: 3.50" step="0.01" style="font-family:var(--ff-mono);font-weight:700;" oninput="calcCG()">';
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  cont.innerHTML=h;
+}
+
+function calcCG(){
+  var cfg=gv('v_config');
+  if(!cfg||!CONFIGS[cfg])return;
+  var axles=CONFIGS[cfg].axles;
+
+  // Collect weights & distances
+  var momentoTotal=0;
+  var pesoTotal=0;
+  var allOk=true;
+  var detalles=[];
+
+  axles.forEach(function(eje,i){
+    var pesoEl=document.getElementById('eje_kg_'+eje.id);
+    var kg=parseFloat(pesoEl?pesoEl.value:0)||0;
+    var dist=i===0?0:(parseFloat(document.getElementById('dist_eje_'+eje.id)?document.getElementById('dist_eje_'+eje.id).value:0)||0);
+    if(i>0&&!dist)allOk=false;
+    if(!kg)allOk=false;
+    pesoTotal+=kg;
+    momentoTotal+=kg*dist;
+    detalles.push({label:eje.label,kg:kg,dist:dist,momento:kg*dist});
+  });
+
+  var longitud=parseFloat(gv('dim_longitud'))||0;
+
+  var cont=document.getElementById('cgResultContainer');
+  if(!allOk||pesoTotal===0){
+    if(cont)cont.style.display='none';
+    return;
+  }
+
+  var xcg=parseFloat((momentoTotal/pesoTotal).toFixed(3));
+
+  // Wheelbase = dist del primer al último eje
+  var lastDist=0;
+  axles.forEach(function(eje,i){
+    if(i>0){var d=parseFloat(document.getElementById('dist_eje_'+eje.id)?document.getElementById('dist_eje_'+eje.id).value:0)||0;if(d>lastDist)lastDist=d;}
+  });
+  var wheelbase=lastDist||longitud||1;
+  var pctWB=Math.min(110,Math.round((xcg/wheelbase)*100));
+
+  cont.style.display='block';
+  document.getElementById('cgXval').textContent=xcg.toFixed(3)+' m';
+  document.getElementById('cgPctval').textContent=pctWB+'%';
+
+  // Bar
+  var barW=Math.min(100,pctWB);
+  document.getElementById('cgBarFill').style.width=barW+'%';
+  document.getElementById('cgMarker').style.left='calc('+barW+'% - 2px)';
+
+  // Momentos detalle
+  var det='<div style="overflow-x:auto;"><table class="rtbl" style="min-width:360px;margin-top:4px;"><thead><tr><th>Eje</th><th style="text-align:right;">Peso (kg)</th><th style="text-align:right;">Distancia (m)</th><th style="text-align:right;">Momento (kg·m)</th></tr></thead><tbody>';
+  detalles.forEach(function(d){
+    det+='<tr><td style="font-size:12px;"><strong>'+d.label+'</strong></td>';
+    det+='<td style="text-align:right;" class="mono">'+d.kg.toLocaleString('es-CO')+'</td>';
+    det+='<td style="text-align:right;" class="mono">'+d.dist.toFixed(3)+'</td>';
+    det+='<td style="text-align:right;" class="mono" style="color:var(--accent2);">'+d.momento.toLocaleString('es-CO',{maximumFractionDigits:1})+'</td></tr>';
+  });
+  det+='<tr style="border-top:1.5px solid var(--bd2);">';
+  det+='<td><strong>Σ TOTAL</strong></td>';
+  det+='<td style="text-align:right;" class="mono"><strong>'+pesoTotal.toLocaleString('es-CO')+'</strong></td>';
+  det+='<td style="text-align:right;" class="mono">—</td>';
+  det+='<td style="text-align:right;" class="mono" style="color:var(--accent);font-weight:900;">'+momentoTotal.toLocaleString('es-CO',{maximumFractionDigits:1})+'</td></tr>';
+  det+='</tbody></table></div>';
+  det+='<div style="margin-top:8px;background:rgba(0,0,0,.15);border-radius:8px;padding:9px 12px;font-family:var(--ff-mono);font-size:12px;color:var(--tx);">';
+  det+='X<sub>CG</sub> = '+momentoTotal.toFixed(1)+' / '+pesoTotal.toLocaleString('es-CO')+' = <strong style="color:var(--accent2);">'+xcg.toFixed(3)+' m</strong> desde el Eje Delantero';
+  det+='</div>';
+  document.getElementById('cgMomentosDetalle').innerHTML=det;
+
+  // Alerta distribución CG
+  var alertaHtml='';
+  if(pctWB<30){
+    alertaHtml='<div class="ab ab-d">🚨 CG muy adelantado ('+pctWB+'%) — riesgo de sobrecarga en eje delantero y pérdida de tracción.</div>';
+  } else if(pctWB>75){
+    alertaHtml='<div class="ab ab-d">🚨 CG muy atrasado ('+pctWB+'%) — riesgo de sobrecarga en ejes traseros e inestabilidad.</div>';
+  } else if(pctWB<40||pctWB>65){
+    alertaHtml='<div class="ab ab-w">⚠️ CG ligeramente descentrado ('+pctWB+'%) — verificar distribución de carga.</div>';
+  } else {
+    alertaHtml='<div class="ab ab-ok">✅ CG en rango aceptable ('+pctWB+'%) — distribución de carga equilibrada.</div>';
+  }
+  document.getElementById('cgAlerta').innerHTML=alertaHtml;
+
+  // Store for saving
+  window._cgData={xcg:xcg,pctWB:pctWB,wheelbase:wheelbase,momentoTotal:momentoTotal,pesoTotal:pesoTotal,detalles:detalles};
+}
+
+// TOAST
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},2200);
+}
+</script>
+</body>
+</html>
