@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>SmartTire IA.Xpta</title>
+<style>
+:root{--p:#0f1c2e;--p2:#1a3a5c;--p3:#2563a8;--acc:#cc0000;--ok:#16a34a;--wn:#d97706;--dg:#dc2626;--bg:#f0f4f8;--sur:#fff;--s2:#f8fafc;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--r:14px;--rs:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;min-height:100vh;}
+#splashScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#0a1628 0%,#0f1c2e 40%,#1a3a5c 100%);padding:24px;}
+#scrapWrapper{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#1a1a2e,#2d1b3d);padding:24px;}
+.app-header{background:linear-gradient(135deg,#0f1c2e 0%,#1a3a5c 60%,#1e4d8c 100%);padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.4);}
+.header-inner{display:flex;align-items:center;gap:12px;height:52px;}
+.logo-pill{background:white;border-radius:8px;padding:4px 10px;display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.lr{color:#cc0000;font-size:17px;font-weight:900;font-family:Arial Black,sans-serif;letter-spacing:-.5px;}
+.lb{color:#111;font-size:17px;font-weight:900;font-family:Arial Black,sans-serif;letter-spacing:-.5px;}
+.lc{width:22px;height:22px;border:3.5px solid #cc0000;border-radius:50%;margin-right:2px;}
+.header-text{border-left:1px solid rgba(255,255,255,.2);padding-left:12px;}
+.header-text h1{font-size:13px;font-weight:700;color:#fff;letter-spacing:.3px;}
+.header-text .sub{font-size:9px;color:#fbbf24;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.header-text .dt{font-size:9px;color:rgba(255,255,255,.5);}
+.session-badge{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 10px;font-size:10px;color:#fff;font-weight:600;cursor:pointer;white-space:nowrap;}
+.nav-tabs{display:flex;background:#0f1c2e;border-top:1px solid rgba(255,255,255,.08);overflow-x:auto;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.ntab{flex:1;min-width:48px;padding:10px 2px;text-align:center;color:rgba(255,255,255,.4);font-size:9px;font-weight:700;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;text-transform:uppercase;white-space:nowrap;}
+.ntab.active{color:#fbbf24;border-bottom-color:#fbbf24;}
+.ntab .tab-icon{font-size:14px;display:block;margin-bottom:2px;}
+.sec{display:none;padding:12px;max-width:780px;margin:0 auto;}
+.sec.active{display:block;}
+.card{background:var(--sur);border-radius:var(--r);padding:13px;margin-bottom:12px;border:1px solid var(--bd);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-title{font-size:11px;font-weight:700;color:var(--p2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:11px;display:flex;align-items:center;gap:7px;padding-bottom:7px;border-bottom:2px solid var(--acc);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.flabel{font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:var(--rs);font-size:13px;color:var(--tx);background:var(--sur);font-family:inherit;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--p3);}
+textarea{resize:vertical;min-height:60px;}
+select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.itabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.itab{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--bd);color:var(--mu);background:var(--s2);}
+.itab.active{background:var(--p2);color:#fff;border-color:var(--p2);}
+.ipage{display:none;}.ipage.active{display:block;}
+.depth-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px;}
+.depth-field{display:flex;flex-direction:column;gap:3px;}
+.dlabel{font-size:10px;font-weight:700;text-align:center;color:#fff;padding:3px;border-radius:4px;}
+.dlabel.i{background:#1d4ed8;}.dlabel.c{background:#059669;}.dlabel.e{background:#7c3aed;}
+.depth-field input{text-align:center;font-weight:700;font-size:15px;padding:9px 3px;}
+.cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px;}
+.cb{padding:8px 2px;border:1.5px solid var(--bd);border-radius:var(--rs);text-align:center;cursor:pointer;font-size:11px;font-weight:700;background:var(--s2);}
+.cb.b{border-color:var(--ok);color:var(--ok);}.cb.r{border-color:var(--wn);color:var(--wn);}.cb.m{border-color:var(--dg);color:var(--dg);}
+.cb.selected.b{background:var(--ok);color:#fff;}.cb.selected.r{background:var(--wn);color:#fff;}.cb.selected.m{background:var(--dg);color:#fff;}
+.trow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);}
+.trow:last-child{border-bottom:none;}
+.tlbl{font-size:13px;font-weight:600;}
+.tgl{position:relative;width:44px;height:24px;flex-shrink:0;}
+.tgl input{opacity:0;width:0;height:0;}
+.sl{position:absolute;inset:0;background:#cbd5e1;border-radius:12px;cursor:pointer;transition:.25s;}
+.sl:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;}
+input:checked+.sl{background:var(--p3);}
+input:checked+.sl:before{transform:translateX(20px);}
+.vdiag{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 0;}
+.axrow{display:flex;align-items:center;gap:5px;width:100%;justify-content:center;}
+.axlbl{font-size:9px;color:var(--mu);font-weight:700;width:36px;text-align:center;flex-shrink:0;line-height:1.3;}
+.atbadge{font-size:7px;font-weight:700;padding:1px 4px;border-radius:4px;display:block;margin-top:1px;}
+.atbadge.dir{background:#dbeafe;color:#1d4ed8;}.atbadge.trac{background:#fef3c7;color:#92400e;}.atbadge.libre{background:#d1fae5;color:#065f46;}
+.tbtn{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;padding:5px 3px;border-radius:10px;border:2px solid var(--bd);background:var(--s2);min-width:44px;position:relative;}
+.tbtn:hover{transform:translateY(-2px);}
+.tbtn.selected{border-color:var(--p3);box-shadow:0 0 0 3px rgba(37,99,168,.2);}
+.tbtn.sem-green{background:linear-gradient(160deg,#d1fae5,#a7f3d0);border-color:#059669;}
+.tbtn.sem-yellow{background:linear-gradient(160deg,#fef3c7,#fde68a);border-color:#d97706;}
+.tbtn.sem-red{background:linear-gradient(160deg,#fee2e2,#fca5a5);border-color:#dc2626;}
+.tico{font-size:17px;line-height:1;}.tpnum{font-size:9px;font-weight:900;color:var(--p2);}
+.saved-dot{position:absolute;top:2px;right:2px;width:7px;height:7px;background:var(--p3);border-radius:50%;border:1px solid #fff;}
+.tspc{flex:0 0 22px;}
+.sem-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;padding:8px;background:var(--s2);border-radius:var(--rs);border:1px solid var(--bd);}
+.sem-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--mu);}
+.sem-dot{width:10px;height:10px;border-radius:50%;}
+.session-list{display:flex;flex-direction:column;gap:8px;}
+.session-item{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rs);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.session-item:hover{border-color:var(--p3);background:#f0f7ff;}
+.session-item.active-session{border-color:var(--p3);background:#eff6ff;}
+.session-meta{flex:1;}
+.session-plate{font-size:14px;font-weight:700;color:var(--p2);}
+.session-info{font-size:11px;color:var(--mu);margin-top:2px;}
+.session-status{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.stag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.stag.ok{background:#d1fae5;color:#065f46;}.stag.warn{background:#fef3c7;color:#92400e;}.stag.danger{background:#fee2e2;color:#991b1b;}.stag.info{background:#dbeafe;color:#1e40af;}
+.dmgblock{border:1.5px solid var(--bd);border-radius:var(--rs);overflow:hidden;margin-bottom:10px;}
+.dmghdr{background:#fff7ed;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.dmghdr span{font-weight:700;font-size:13px;color:#92400e;}
+.dmgbody{padding:12px;}
+.areabts{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.areabtn{padding:7px 11px;border-radius:var(--rs);border:1.5px solid var(--bd);font-size:12px;font-weight:700;cursor:pointer;background:var(--s2);color:var(--mu);}
+.areabtn.selected{background:var(--dg);color:#fff;border-color:var(--dg);}
+.chki{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);}
+.chki:last-child{border-bottom:none;}
+.chkico{font-size:18px;flex-shrink:0;}.chkb{flex:1;}.chkt{font-weight:700;font-size:13px;margin-bottom:6px;}
+.sbts{display:flex;gap:4px;flex-wrap:wrap;}
+.sbt{padding:5px 10px;border-radius:20px;border:1.5px solid var(--bd);font-size:11px;font-weight:700;cursor:pointer;background:var(--s2);}
+.sbt.ok{border-color:var(--ok);color:var(--ok);}.sbt.aten{border-color:var(--wn);color:var(--wn);}.sbt.urg{border-color:var(--dg);color:var(--dg);}
+.sbt.selected.ok{background:var(--ok);color:#fff;}.sbt.selected.aten{background:var(--wn);color:#fff;}.sbt.selected.urg{background:var(--dg);color:#fff;}
+.cnotes{margin-top:6px;display:none;}
+.cnotes.visible{display:block;}
+.rtbl{width:100%;border-collapse:collapse;font-size:12px;}
+.rtbl th{background:var(--p2);color:#fff;padding:7px 8px;text-align:left;font-size:11px;}
+.rtbl td{padding:6px 8px;border-bottom:1px solid var(--bd);vertical-align:top;}
+.rtbl tr:last-child td{border-bottom:none;}
+.rtbl tr:nth-child(even) td{background:var(--s2);}
+.rb{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;}
+.rb.ok{background:#d1fae5;color:#065f46;}.rb.aten{background:#fef3c7;color:#92400e;}.rb.urg{background:#fee2e2;color:#991b1b;}.rb.info{background:#dbeafe;color:#1e40af;}.rb.pend{background:#f1f5f9;color:#475569;}
+.rtitle{font-size:12px;font-weight:700;color:var(--p2);margin-bottom:8px;padding:7px 10px;background:var(--s2);border-radius:var(--rs);border-left:3px solid var(--acc);}
+.si{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px;}
+.si:last-child{border-bottom:none;}
+.badge{padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;}
+.badge.ok{background:#d1fae5;color:#065f46;}.badge.warning{background:#fef3c7;color:#92400e;}.badge.danger{background:#fee2e2;color:#991b1b;}.badge.info{background:#dbeafe;color:#1e40af;}
+.btn-acc{width:100%;padding:14px;background:var(--acc);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:7px;}
+.btn-pri{width:100%;padding:13px;background:var(--p2);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;margin-top:7px;}
+.btn-sec{width:100%;padding:11px;background:var(--sur);color:var(--p2);border:1.5px solid var(--p2);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;margin-top:7px;}
+.btn-ghost{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;background:var(--s2);color:var(--p3);border:1.5px solid var(--bd);border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer;}
+.btn-ok{width:100%;padding:14px;background:var(--ok);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;margin-top:7px;}
+.nav-btns{display:flex;gap:9px;margin-top:10px;}
+.nav-btns button{flex:1;padding:12px;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;}
+.bnext{background:var(--p2);color:#fff;}.bback{background:var(--sur);color:var(--p2);border:1.5px solid var(--p2)!important;}
+.alert{padding:10px 13px;border-radius:var(--rs);font-size:12px;font-weight:600;margin-bottom:10px;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:var(--sur);border-radius:20px 20px 0 0;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;}
+.sheet-hdr{background:var(--p2);color:#fff;padding:13px 16px;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.sheet-hdr h2{font-size:14px;font-weight:700;}
+.sheet-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+.sheet-body{padding:16px;}
+.conf-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px;}
+.conf-row:last-child{border-bottom:none;}
+.conf-row span:first-child{color:var(--mu);font-weight:600;}
+.conf-row span:last-child{font-weight:700;text-align:right;max-width:60%;}
+.conf-sec{font-size:11px;font-weight:700;color:var(--p2);text-transform:uppercase;padding:8px 0 4px;border-bottom:2px solid var(--acc);margin-bottom:4px;letter-spacing:.4px;}
+.conf-btns{display:flex;gap:10px;margin-top:14px;}
+.conf-btns button{flex:1;padding:13px;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;}
+.cbtn-ok{background:var(--ok);color:#fff;}.cbtn-edit{background:var(--s2);color:var(--p2);}
+.ablk{border:1.5px solid var(--bd);border-radius:var(--rs);margin-bottom:12px;overflow:hidden;}
+.abh{padding:9px 13px;display:flex;align-items:center;gap:9px;font-weight:700;font-size:13px;}
+.abh.dir{background:#dbeafe;color:#1e40af;}.abh.trac{background:#fef3c7;color:#92400e;}.abh.libre{background:#d1fae5;color:#065f46;}.abh.rep{background:#f3e8ff;color:#6b21a8;}
+.abb{padding:11px;}
+.mrow{display:flex;align-items:center;gap:5px;margin-bottom:9px;padding-bottom:9px;border-bottom:1px solid var(--bd);flex-wrap:wrap;}
+.mrow:last-child{border-bottom:none;margin-bottom:0;}
+.mplbl{font-size:11px;font-weight:900;color:var(--p2);background:#eff6ff;padding:4px 7px;border-radius:6px;flex-shrink:0;min-width:44px;text-align:center;}
+.mdep{display:flex;gap:3px;flex:1;min-width:140px;}
+.mdep input{flex:1;text-align:center;padding:7px 2px;font-size:12px;font-weight:700;}
+.mchk{display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--mu);cursor:pointer;}
+.mchk input{width:auto;padding:0;margin:0;}
+.ac-box{background:var(--sur);border:1.5px solid var(--bd);border-radius:var(--rs);box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:180px;overflow-y:auto;margin-top:2px;position:absolute;z-index:100;width:100%;}
+.ac-item{padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600;border-bottom:1px solid var(--bd);}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover{background:#eff6ff;}
+.ac-wrap{position:relative;}
+.traz-row{display:grid;grid-template-columns:44px 1fr 80px 90px;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--bd);font-size:12px;}
+.traz-row:last-child{border-bottom:none;}
+.traz-num{font-weight:900;color:var(--p2);background:#eff6ff;padding:4px 6px;border-radius:6px;font-size:11px;text-align:center;}
+.traz-hdr{background:var(--p2);color:#fff;padding:8px 10px;border-radius:var(--rs) var(--rs) 0 0;display:grid;grid-template-columns:44px 1fr 80px 90px;gap:8px;font-size:10px;font-weight:700;}
+.traz-wrap{border:1px solid var(--bd);border-radius:var(--rs);overflow:hidden;margin-bottom:12px;}
+.session-counter{background:var(--p2);color:#fff;border-radius:var(--rs);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.sc-num{font-size:24px;font-weight:900;}.sc-lbl{font-size:11px;opacity:.7;}
+.cm-btn{flex:1;padding:10px;border:1.5px solid var(--bd);border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;text-align:center;background:var(--s2);color:var(--mu);}
+.cm-btn.active{background:var(--p2);color:#fff;border-color:var(--p2);}
+.acfg{display:flex;align-items:center;gap:7px;margin-bottom:7px;padding:8px 10px;border:1.5px solid var(--bd);border-radius:var(--rs);background:var(--s2);}
+.kpi-grid-met{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+.kpi-card-met{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rs);padding:12px;text-align:center;}
+.kpi-n{font-size:22px;font-weight:900;color:var(--p2);}
+.kpi-l{font-size:10px;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
+.app-footer{background:#0f1c2e;color:rgba(255,255,255,.45);text-align:center;padding:12px 16px 18px;margin-top:24px;font-size:10px;}
+.st-name{font-size:13px;font-weight:900;font-family:Arial Black,sans-serif;letter-spacing:-.2px;}
+.st-name span{color:#3cb371;}
+.copy{font-size:10px;color:rgba(255,255,255,.3);margin-top:3px;}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splashScreen">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px;">
+    <div style="background:white;border-radius:12px;padding:8px 18px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 24px rgba(0,0,0,.3);">
+      <div class="lc"></div><span class="lr">Red</span><span class="lb">llantas</span>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;">Programa de Soporte Tecnico a Flotas Vehiculares</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 6px;">
+    <div style="width:48px;height:48px;border-radius:50%;border:2.5px solid #3cb371;display:flex;align-items:center;justify-content:center;background:rgba(60,179,113,.08);">
+      <svg width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="13" r="4" fill="#3cb371"/><circle cx="13" cy="4" r="2.2" fill="#3cb371"/><circle cx="21" cy="18" r="2.2" fill="#3cb371"/><circle cx="5" cy="18" r="2.2" fill="#3cb371"/><line x1="13" y1="9" x2="13" y2="6.2" stroke="#3cb371" stroke-width="1.4"/><line x1="13" y1="17" x2="19" y2="20.5" stroke="#3cb371" stroke-width="1.4"/><line x1="13" y1="17" x2="7" y2="20.5" stroke="#3cb371" stroke-width="1.4"/><circle cx="13" cy="13" r="12" fill="none" stroke="#3cb371" stroke-width="1.2" stroke-dasharray="3 2"/></svg>
+    </div>
+    <div>
+      <div style="font-size:26px;font-weight:900;font-family:Arial Black,sans-serif;letter-spacing:-.5px;line-height:1;"><span style="color:#3cb371;">Smart</span><span style="color:#fff;">Tire</span></div>
+      <div style="font-size:11px;font-weight:700;color:#3cb371;letter-spacing:1.2px;text-transform:uppercase;">IA.Xpta</div>
+    </div>
+  </div>
+  <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:36px;letter-spacing:.3px;">Fleet Analyst Pro</div>
+  <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;">Selecciona una actividad</div>
+  <button id="btnLaunchInsp" style="width:100%;max-width:360px;background:linear-gradient(135deg,#1a3a5c,#2563a8);border:1.5px solid rgba(255,255,255,.15);border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);text-align:left;">
+    <div style="width:54px;height:54px;background:rgba(255,255,255,.1);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:28px;">&#x1F6DE;</div>
+    <div style="flex:1;"><div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;">Inspeccion de Llantas</div><div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.4;">Registro de medidas, semaforo, novedades y reporte</div></div>
+    <div style="font-size:20px;color:rgba(255,255,255,.4);">&#8250;</div>
+  </button>
+  <button id="btnLaunchScrap" style="width:100%;max-width:360px;background:linear-gradient(135deg,#1a1a2e,#2d1b3d);border:1.5px solid rgba(255,165,0,.2);border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,.3);text-align:left;">
+    <div style="width:54px;height:54px;background:rgba(255,165,0,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:28px;">&#x1F50D;</div>
+    <div style="flex:1;"><div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;">Analisis de Llanta Desecho</div><div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.4;">Diagnostico Scrap - Causas de falla - Trazabilidad</div></div>
+    <div style="font-size:20px;color:rgba(255,165,0,.4);">&#8250;</div>
+  </button>
+  <div style="margin-top:36px;text-align:center;">
+    <div style="font-size:10px;color:rgba(255,255,255,.2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0563696a716476676a6234457760616969646b7164762b666a68">[email&#160;protected]</a></div>
+    <div style="font-size:9px;color:rgba(255,255,255,.15);margin-top:3px;">SmartTire IA.Xpta &copy; RedLlantas 2026</div>
+  </div>
+</div>
+
+<!-- SCRAP PLACEHOLDER -->
+<div id="scrapWrapper">
+  <div style="font-size:52px;margin-bottom:16px;">&#x1F50D;</div>
+  <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:8px;">Analisis de Llanta Desecho</div>
+  <div style="font-size:13px;color:rgba(255,255,255,.45);text-align:center;max-width:280px;line-height:1.6;margin-bottom:28px;">Modulo Scrap en construccion.<br>Proximamente disponible en SmartTire IA.Xpta.</div>
+  <button id="btnBackScrap" style="padding:13px 28px;background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">&#8592; Volver al inicio</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="appWrapper" style="display:none;">
+<div class="app-header">
+  <div class="header-inner">
+    <div class="logo-pill"><div class="lc"></div><span class="lr">Red</span><span class="lb">llantas</span></div>
+    <div class="header-text">
+      <div class="sub">Programa de Soporte Tecnico a Flotas Vehiculares</div>
+      <h1>Fleet Analyst Pro</h1>
+      <div class="dt" id="hDate"></div>
+    </div>
+    <div class="session-badge" id="sessionBadge">&#128203; Sesion: 0</div>
+  </div>
+</div>
+<div class="nav-tabs">
+  <div class="ntab active" id="nt0"><span class="tab-icon">&#x1F3E2;</span>Sesion</div>
+  <div class="ntab" id="nt1"><span class="tab-icon">&#x1F69B;</span>Vehiculo</div>
+  <div class="ntab" id="nt2"><span class="tab-icon">&#x1F6DE;</span>Llantas</div>
+  <div class="ntab" id="nt3"><span class="tab-icon">&#x1F527;</span>Novedades</div>
+  <div class="ntab" id="nt4"><span class="tab-icon">&#x1F4CA;</span>Reportes</div>
+  <div class="ntab" id="nt5"><span class="tab-icon">&#x1F5C2;</span>Flota</div>
+  <div class="ntab" id="nt6"><span class="tab-icon">&#x1F4C8;</span>Metricas</div>
+</div>
+
+<!-- TAB 0: SESION -->
+<div class="sec active" id="tab0">
+  <div class="card"><div class="card-title">&#x1F3E2; Datos de la Visita</div>
+    <div class="fr"><div class="fg"><label class="flabel">Empresa Cliente</label><input type="text" id="cli_empresa" placeholder="Nombre de la empresa"></div><div class="fg"><label class="flabel">Ciudad</label><input type="text" id="cli_ciudad" placeholder="Ciudad"></div></div>
+    <div class="fr">
+      <div class="fg"><label class="flabel">Inspector / Analista</label>
+        <select id="cli_inspector">
+          <option value="">Seleccionar...</option>
+          <option>Diego Hincapie Yepes</option><option>Elvis Ahumada Hernandez</option><option>Andres Villalobos</option>
+          <option>Juan Mauricio Restrepo</option><option>Victor Achinte Batero</option>
+          <option>Juan Sebastian Osma</option><option>Gonzalo Zapata Agudelo</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Fecha</label><input type="date" id="cli_fecha"></div>
+    </div>
+    <div class="fr"><div class="fg"><label class="flabel">Hora Inicio</label><input type="time" id="cli_hinicio"></div><div class="fg"><label class="flabel">Hora Fin</label><input type="time" id="cli_hfin"></div></div>
+  </div>
+  <div class="card"><div class="card-title">&#x1F4E8; Contacto</div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <div class="cm-btn active" id="cm-email">&#x1F4E7; Correo</div>
+      <div class="cm-btn" id="cm-whatsapp">&#x1F4AC; WhatsApp</div>
+      <div class="cm-btn" id="cm-ambos">&#x1F4F2; Ambos</div>
+    </div>
+    <div id="cm-email-field" class="fg" style="margin-bottom:8px;"><label class="flabel">Correo</label><input type="email" id="cli_email" placeholder="contacto@empresa.com"></div>
+    <div id="cm-wa-field" class="fg" style="display:none;margin-bottom:8px;"><label class="flabel">WhatsApp</label><input type="tel" id="cli_whatsapp" placeholder="+57 300 000 0000"></div>
+    <div class="fg"><label class="flabel">Nombre Contacto</label><input type="text" id="cli_contacto" placeholder="Nombre del responsable"></div>
+  </div>
+  <button class="btn-ok" id="btnIniciarInsp">Iniciar Inspeccion de Flota &#8594;</button>
+</div>
+
+<!-- TAB 1: VEHICULO -->
+<div class="sec" id="tab1">
+  <div class="session-counter"><div><div class="sc-num" id="scNum">0</div><div class="sc-lbl">Vehiculos inspeccionados</div></div>
+    <button class="btn-ghost" id="btnNuevoVeh" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3);">+ Nuevo</button></div>
+  <div class="card"><div class="card-title">&#x1F69B; Datos del Vehiculo</div>
+    <div class="fr"><div class="fg"><label class="flabel">Placa</label><input type="text" id="placa" placeholder="ABC-123" style="text-transform:uppercase;font-weight:700;font-size:15px;"></div>
+      <div class="fg"><label class="flabel">Tipo</label>
+        <select id="tipoV">
+          <option value="">Seleccionar...</option><option value="camioneta">Camioneta</option><option value="camion2">Camion 2 ejes</option>
+          <option value="camion3">Camion 3 ejes</option><option value="tracto">Tracto-camion</option>
+          <option value="remolque">Remolque</option><option value="bus">Bus</option><option value="otro">Otro</option>
+        </select>
+      </div></div>
+    <div class="fr"><div class="fg"><label class="flabel">Kilometraje</label><input type="number" id="km" placeholder="000000"></div><div class="fg"><label class="flabel">Empresa / Ruta</label><input type="text" id="empresa" placeholder="Ruta o empresa"></div></div>
+  </div>
+  <div class="card"><div class="card-title">&#x2699; Configuracion de Posiciones</div>
+    <div id="axleCfgs"></div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <button id="btnQuitarGrupo" style="flex:1;padding:9px;border-radius:var(--rs);background:#fee2e2;color:var(--dg);border:none;font-weight:700;cursor:pointer;">- Quitar grupo</button>
+      <button id="btnAgregarGrupo" style="flex:1;padding:9px;border-radius:var(--rs);background:#d1fae5;color:var(--ok);border:none;font-weight:700;cursor:pointer;">+ Agregar grupo</button>
+    </div>
+    <div class="fg" style="margin-bottom:8px;"><label class="flabel">Llanta de repuesto</label>
+      <select id="incRep" style="width:auto;"><option value="no">No</option><option value="si">Si</option></select></div>
+    <div class="alert" style="background:#eff6ff;color:var(--p3);border-left:3px solid var(--p3);">Total posiciones: <strong id="totalT">18</strong></div>
+  </div>
+  <div class="nav-btns"><button class="bback" id="btnBackSesion">&#8592; Sesion</button><button class="bnext" id="btnGoLlantas">Llantas &#8594;</button></div>
+</div>
+
+<!-- TAB 2: LLANTAS -->
+<div class="sec" id="tab2">
+  <div class="card">
+    <div class="card-title">&#x1F5FA; Posiciones<button class="btn-ghost" id="btnMasivo" style="margin-left:auto;padding:5px 10px;font-size:10px;">&#x1F4CB; Ingreso Masivo</button></div>
+    <div class="vdiag" id="vDiag"></div>
+    <div class="sem-legend" id="semLegend"></div>
+  </div>
+  <div class="card" id="tfCard" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div><div id="tfTitle" style="font-size:14px;font-weight:700;color:var(--p2);"></div><div id="tfSemTag" style="margin-top:3px;font-size:11px;font-weight:700;"></div></div>
+      <span id="tfProg" style="font-size:11px;color:var(--mu);background:var(--s2);padding:4px 8px;border-radius:10px;"></span>
+    </div>
+    <div class="itabs"><div class="itab active" id="it0">&#x1F6DE; ID</div><div class="itab" id="it1">&#x1F4CF; Medidas</div><div class="itab" id="it2">&#x1F4C5; Montaje</div><div class="itab" id="it3">&#x1F4A5; Danos</div></div>
+    <div class="ipage active" id="ip0">
+      <div class="fr">
+        <div class="fg"><label class="flabel">Marca</label><div class="ac-wrap"><input type="text" id="tf_marca" placeholder="Escribe la marca..." autocomplete="off"><div id="marcaSugg" class="ac-box" style="display:none;"></div></div></div>
+        <div class="fg"><label class="flabel">Diseno</label><div class="ac-wrap"><input type="text" id="tf_disenio" placeholder="Diseno del neumatico..." autocomplete="off"><div id="disenioSugg" class="ac-box" style="display:none;"></div></div></div>
+      </div>
+      <div class="fr"><div class="fg"><label class="flabel">Dimension</label><input type="text" id="tf_dim" placeholder="295/80R22.5"></div><div class="fg"><label class="flabel"># Interno</label><input type="text" id="tf_interno" placeholder="Codigo interno"></div></div>
+      <div class="fr"><div class="fg"><label class="flabel">Serie / DOT</label><input type="text" id="tf_serie" placeholder="DOT XXXX"></div>
+        <div class="fg"><label class="flabel">Tipo</label><select id="tf_tipo"><option value="">Seleccionar...</option><option>Nueva</option><option>Reencauchada</option><option>Usada</option></select></div></div>
+      <div class="fg"><label class="flabel">Reencauche No.</label><input type="text" id="tf_reenc" placeholder="0 = Nueva" style="max-width:160px;"></div>
+    </div>
+    <div class="ipage" id="ip1">
+      <div class="fg" style="margin-bottom:9px;"><label class="flabel">Presion (PSI)</label><input type="number" id="tf_psi" placeholder="ej: 110" style="max-width:160px;"></div>
+      <label class="flabel" style="display:block;margin-bottom:6px;">Profundidad de Labrado (mm)</label>
+      <div class="depth-grid"><div class="depth-field"><div class="dlabel i">Azul Interior</div><input type="number" id="tf_int" placeholder="mm" step="0.5" min="0" max="30"></div>
+        <div class="depth-field"><div class="dlabel c">Verde Centro</div><input type="number" id="tf_cen" placeholder="mm" step="0.5" min="0" max="30"></div>
+        <div class="depth-field"><div class="dlabel e">Morado Exterior</div><input type="number" id="tf_ext" placeholder="mm" step="0.5" min="0" max="30"></div></div>
+      <div class="fg" style="margin-top:9px;"><label class="flabel">Condicion Visual</label>
+        <div class="cond-grid"><div class="cb b" id="cb_b">Buena</div><div class="cb r" id="cb_r">Regular</div><div class="cb m" id="cb_m">Mala</div></div></div>
+      <div style="margin-top:9px;">
+        <div class="trow"><span class="tlbl">Baja presion</span><label class="tgl"><input type="checkbox" id="tf_bp"><span class="sl"></span></label></div>
+        <div class="trow"><span class="tlbl">Requiere rotacion</span><label class="tgl"><input type="checkbox" id="tf_rot"><span class="sl"></span></label></div>
+        <div class="trow"><span class="tlbl">Requiere alineacion</span><label class="tgl"><input type="checkbox" id="tf_alin"><span class="sl"></span></label></div>
+        <div class="trow"><span class="tlbl">Para desmontar</span><label class="tgl"><input type="checkbox" id="tf_des"><span class="sl"></span></label></div>
+      </div>
+      <div class="fg" style="margin-top:9px;"><label class="flabel">Observaciones</label><textarea id="tf_obs" placeholder="Notas de la llanta..."></textarea></div>
+    </div>
+    <div class="ipage" id="ip2">
+      <div class="fr"><div class="fg"><label class="flabel">Fecha de Montaje</label><input type="date" id="tf_fm"></div><div class="fg"><label class="flabel">Km en Montaje</label><input type="number" id="tf_km" placeholder="125000"></div></div>
+      <div class="fg"><label class="flabel">Observaciones de Montaje</label><textarea id="tf_obsm" placeholder="Condicion al montar..."></textarea></div>
+    </div>
+    <div class="ipage" id="ip3"><div id="dmgList"></div>
+      <button class="btn-ghost" id="btnAddDmg" style="width:100%;justify-content:center;margin-top:4px;">+ Agregar Dano</button></div>
+    <div style="margin-top:14px;border-top:2px solid var(--bd);padding-top:12px;display:flex;gap:8px;">
+      <button id="btnValidar" style="flex:1;padding:13px;background:var(--ok);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;">Validar y Guardar</button>
+      <button id="btnOmitir" style="padding:13px 16px;background:var(--s2);color:var(--mu);border:1.5px solid var(--bd);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;">Omitir</button>
+    </div>
+  </div>
+  <div class="nav-btns"><button class="bback" id="btnBackVeh">&#8592; Vehiculo</button><button class="bnext" id="btnGuardarVeh">Guardar Vehiculo &#8594;</button></div>
+</div>
+
+<!-- TAB 3: NOVEDADES -->
+<div class="sec" id="tab3">
+  <div class="card"><div class="card-title">&#x1F527; Aspectos de Mantenimiento</div><div id="chkItems"></div></div>
+  <div class="card"><div class="card-title">&#x1F4DD; Observaciones Generales</div><textarea id="obsGen" rows="4" placeholder="Recomendaciones..."></textarea></div>
+  <div class="nav-btns"><button class="bback" id="btnBackLlantas">&#8592; Llantas</button><button class="bnext" id="btnGoReportes">Reportes &#8594;</button></div>
+</div>
+
+<!-- TAB 4: REPORTES -->
+<div class="sec" id="tab4">
+  <div class="card"><div class="card-title">&#x1F4CA; Reportes de la Visita</div>
+    <div class="itabs"><div class="itab active" id="rt0">Mantenimiento</div><div class="itab" id="rt1">Danos</div><div class="itab" id="rt2">Montajes</div><div class="itab" id="rt3">Identificacion</div><div class="itab" id="rt4">Trazabilidad</div></div>
+    <div class="ipage active" id="rp0"><div id="rMaint"></div></div>
+    <div class="ipage" id="rp1"><div id="rDmg"></div></div>
+    <div class="ipage" id="rp2"><div id="rMount"></div></div>
+    <div class="ipage" id="rp3"><div id="rIdent"></div></div>
+    <div class="ipage" id="rp4"><div id="rTraz"></div></div>
+  </div>
+  <button class="btn-acc" id="btnExportCSV">&#x2B07; Descargar CSV (Excel)</button>
+  <button class="btn-pri" id="btnExportHTML">&#x1F4C4; Generar Reporte PDF</button>
+</div>
+
+<!-- TAB 5: FLOTA -->
+<div class="sec" id="tab5">
+  <div class="card"><div class="card-title">&#x1F5C2; Vehiculos Inspeccionados</div><div id="sessionList"></div></div>
+  <button class="btn-ok" id="btnNuevoVeh2">+ Agregar Vehiculo</button>
+  <button class="btn-acc" id="btnExportCSV2">&#x2B07; Exportar CSV Sesion</button>
+  <button class="btn-pri" id="btnExportHTML2">&#x1F4C4; Reporte de Visita PDF</button>
+</div>
+
+<!-- TAB 6: METRICAS -->
+<div class="sec" id="tab6">
+  <div class="card"><div class="card-title">&#x1F4C8; Metricas de Rendimiento</div>
+    <div class="fr"><div class="fg"><label class="flabel">Vehiculo</label><select id="met_veh"><option value="__all__">Todos</option></select></div>
+      <div class="fg"><label class="flabel">Costo llanta (COP)</label><input type="number" id="met_costo" placeholder="1200000" value="1200000"></div></div>
+  </div>
+  <div id="metKpis" class="kpi-grid-met"></div>
+  <div class="card"><div class="card-title">Km Recorrido vs. Proyectado</div><div style="overflow-x:auto;"><canvas id="chartKmPos" height="220"></canvas></div></div>
+  <div class="card"><div class="card-title">Vida Util Restante (%)</div><div style="overflow-x:auto;"><canvas id="chartVida" height="220"></canvas></div></div>
+  <div class="card"><div class="card-title">CPK por Posicion</div><div style="overflow-x:auto;"><canvas id="chartCpk" height="220"></canvas></div></div>
+  <div class="card"><div class="card-title">Rendimiento por Eje</div><div style="overflow-x:auto;"><canvas id="chartEje" height="220"></canvas></div></div>
+  <div class="card"><div class="card-title">Ranking Disenos</div><div style="overflow-x:auto;"><canvas id="chartRanking" height="220"></canvas></div></div>
+  <div class="card"><div class="card-title">Detalle por Llanta</div><div style="overflow-x:auto;"><table class="rtbl" id="metTable"></table></div></div>
+</div>
+
+<!-- OVERLAYS -->
+<div class="overlay" id="massModal"><div class="sheet"><div class="sheet-hdr"><h2>Ingreso Masivo por Grupo</h2><button class="sheet-close" id="btnCloseMass">&#x2715;</button></div><div class="sheet-body" id="massBody"></div></div></div>
+<div class="overlay" id="confModal"><div class="sheet" style="max-width:500px;"><div class="sheet-hdr" style="background:var(--ok);border-radius:20px 20px 0 0;"><h2>Validar Informacion de Llanta</h2><button class="sheet-close" id="btnCloseConf">&#x2715;</button></div><div class="sheet-body" id="confBody"></div></div></div>
+
+<!-- FOOTER -->
+<div class="app-footer">
+  <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:4px;">
+    <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="2" fill="#3cb371"/><circle cx="7" cy="2.2" r="1" fill="#3cb371"/><circle cx="11.2" cy="9.5" r="1" fill="#3cb371"/><circle cx="2.8" cy="9.5" r="1" fill="#3cb371"/><line x1="7" y1="5" x2="7" y2="3.2" stroke="#3cb371" stroke-width=".8"/><line x1="7" y1="9" x2="9.8" y2="10.5" stroke="#3cb371" stroke-width=".8"/><line x1="7" y1="9" x2="4.2" y2="10.5" stroke="#3cb371" stroke-width=".8"/><circle cx="7" cy="7" r="6" fill="none" stroke="#3cb371" stroke-width=".8"/></svg>
+    <div class="st-name"><span>Smart</span>Tire IA.Xpta</div>
+  </div>
+  <div class="copy">RedLlantas - Programa de Soporte Tecnico a Flotas Vehiculares - <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9bfb5b6adb8aabbb6bee899abbcbdb5b5b8b7adb8aaf7bab6b4">[email&#160;protected]</a></div>
+</div>
+</div><!-- end appWrapper -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+var AT={dir:'Direccion',trac:'Traccion',libre:'Eje Libre'};
+var SEM={camioneta:{red:2,yellow:4,rl:'<=2mm',yl:'<=4mm',gl:'>4mm'},camion2:{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'},camion3:{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'},tracto:{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'},remolque:{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'},bus:{red:3,yellow:6,rl:'<=3mm',yl:'<=6mm',gl:'>6mm'},otro:{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'},'default':{red:3,yellow:8,rl:'<=3mm',yl:'<=8mm',gl:'>8mm'}};
+var CHECKLIST=[{id:'suspension',icon:'&#x1F529;',label:'Suspension / Direccion'},{id:'rotacion',icon:'&#x1F504;',label:'Rotaciones pendientes'},{id:'alineacion',icon:'&#x1F4D0;',label:'Alineacion requerida'},{id:'danos',icon:'&#x1F4A5;',label:'Danos Operativos'},{id:'bajapresion',icon:'&#x1F53B;',label:'Reporte Baja Presion'},{id:'desmontar',icon:'&#x1F527;',label:'Llantas para Desmontar'},{id:'frenos',icon:'&#x1F6D1;',label:'Sistema de Frenos'}];
+var DMG_AREAS=['BDR','Costado','Volteo','Banda de rodamiento','Hombro','Talon'];
+var DMG_ASPECTS=['Desgaste irregular','Corte','Perforacion','Exposicion de cuerdas','Abrasion','Separacion','Grieta lateral','Reventon','Reparacion previa','Pinchadura','Protuberancia'];
+var TIRE_CATALOG={'Kumho':['KCA03','KMA03','KLA03','KRA03','KZA03','CW51','KC53'],'Bridgestone':['R150','M729','R168','M703','R249','L315','G611'],'Michelin':['XZE2','XZE','XDE2','XTE2','XDY','X MultiWay','Steer Agilis'],'Continental':['HSC1','HDC1','HTC1','EcoPlus HS3','Conti Hybrid HT3'],'Goodyear':['G316','G281 MST','G182 RSD','KMAX S','KMAX D','KMAX T'],'Pirelli':['TR01','TR85','TH01','TS01','FG01','FR01'],'Hankook':['TH31','TH22','TM15','DH35','DH31','AL21'],'Dunlop':['SP371','SP372','SP160','SP680','LT5','LT10'],'Toyo':['M154','M134','M144','Open Country','H08'],'Yokohama':['RY487','RY447','RY283','TY517','S500'],'BKT':['TRUCK STEEL TS','COMMANDER STL','ASCENT','ENDURO'],'Triangle':['TR916','TR918','TR912','TR668'],'Double Coin':['RR170','RT500','RT600','RLB490','RM170'],'Linglong':['LLF16','LLD20','LLG18','F820'],'Otro':[]};
+var MARCAS=Object.keys(TIRE_CATALOG);
+
+var session={empresa:'',ciudad:'',inspector:'',fecha:'',hinicio:'',hfin:'',email:'',whatsapp:'',contacto:'',cm:'email'};
+var vehicles=[];
+var currentVeh={veh:{},axles:[{type:'dir',doble:false},{type:'trac',doble:true},{type:'trac',doble:true},{type:'libre',doble:true},{type:'trac',doble:true}],repuesto:false,tires:{},checklist:{},sel:null};
+var chartInstances={};
+
+function gv(id){var e=document.getElementById(id);return e?e.value:'';}
+
+function toast(msg,color){
+  var el=document.createElement('div');
+  el.style.cssText='position:fixed;top:70px;left:50%;transform:translateX(-50%);background:'+(color||'var(--ok)')+';color:#fff;padding:11px 20px;border-radius:30px;font-weight:700;font-size:13px;z-index:400;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;';
+  el.textContent=msg;document.body.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},2500);
+}
+
+function goTab(i){
+  for(var j=0;j<7;j++){
+    document.getElementById('nt'+j).classList.toggle('active',j===i);
+    document.getElementById('tab'+j).classList.toggle('active',j===i);
+  }
+  if(i===4)buildReports();
+  if(i===5)buildSessionList();
+  if(i===6)buildMetrics();
+}
+
+function saveSession(){session={empresa:gv('cli_empresa'),ciudad:gv('cli_ciudad'),inspector:gv('cli_inspector'),fecha:gv('cli_fecha'),hinicio:gv('cli_hinicio'),hfin:gv('cli_hfin'),email:gv('cli_email'),whatsapp:gv('cli_whatsapp'),contacto:gv('cli_contacto'),cm:session.cm};}
+
+function setCM(v){
+  session.cm=v;
+  ['email','whatsapp','ambos'].forEach(function(k){document.getElementById('cm-'+k).classList.toggle('active',k===v);});
+  document.getElementById('cm-email-field').style.display=(v==='email'||v==='ambos')?'flex':'none';
+  document.getElementById('cm-wa-field').style.display=(v==='whatsapp'||v==='ambos')?'flex':'none';
+}
+
+function saveVeh(){currentVeh.veh={placa:gv('placa').toUpperCase(),tipo:gv('tipoV'),km:gv('km'),empresa:gv('empresa')};}
+
+function changeAxles(d){
+  if(d>0)currentVeh.axles.push({type:'libre',doble:false});
+  else if(currentVeh.axles.length>1)currentVeh.axles.pop();
+  buildAxleCfgs();buildDiag();
+}
+
+function buildAxleCfgs(){
+  var h='';
+  currentVeh.axles.forEach(function(a,i){
+    h+='<div class="acfg"><span style="font-size:11px;font-weight:700;color:var(--mu);min-width:34px;">Eje '+(i+1)+'</span>';
+    h+='<select onchange="setAT('+i+',this.value)" style="padding:6px;border:1.5px solid var(--bd);border-radius:6px;font-size:12px;font-weight:700;flex:1;">';
+    h+='<option value="dir"'+(a.type==='dir'?' selected':'')+'>Direccion</option>';
+    h+='<option value="trac"'+(a.type==='trac'?' selected':'')+'>Traccion</option>';
+    h+='<option value="libre"'+(a.type==='libre'?' selected':'')+'>Libre</option>';
+    h+='</select>';
+    h+='<label style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--mu);cursor:pointer;"><input type="checkbox"'+(a.doble?' checked':'')+' onchange="setAD('+i+',this.checked)" style="width:auto;padding:0;"> Doble</label>';
+    h+='</div>';
+  });
+  document.getElementById('axleCfgs').innerHTML=h;
+  buildDiag();
+}
+
+function setAT(i,v){currentVeh.axles[i].type=v;buildDiag();}
+function setAD(i,v){currentVeh.axles[i].doble=v;buildDiag();}
+
+function getPositions(){return getPosFromVeh(currentVeh);}
+function getPosFromVeh(sv){
+  var rep=sv.repuesto;var pos=[];var n=1;
+  sv.axles.forEach(function(a,i){
+    var g=i+1;
+    if(a.doble){pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LLI'});n++;pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LI'});n++;pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LD'});n++;pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LLD'});n++;}
+    else{pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LI'});n++;pos.push({id:'G'+g+'P'+n,label:'P'+n,axle:g,atype:a.type,side:'LD'});n++;}
+  });
+  if(rep)pos.push({id:'REP',label:'REP',axle:0,atype:'rep',side:'REP'});
+  try{document.getElementById('totalT').textContent=pos.length;}catch(e){}
+  return pos;
+}
+
+function getSemRule(){var t=gv('tipoV');return SEM[t]||SEM['default'];}
+function getSemClass(d,tipo){
+  var t=tipo||gv('tipoV');var rule=SEM[t]||SEM['default'];
+  var vals=[d.int,d.cen,d.ext].map(function(v){return parseFloat(v);}).filter(function(v){return !isNaN(v);});
+  if(!vals.length)return '';
+  var mn=Math.min.apply(null,vals);
+  return mn<=rule.red?'sem-red':mn<=rule.yellow?'sem-yellow':'sem-green';
+}
+
+function updateSemLegend(){
+  var rule=getSemRule();
+  var tEl=document.getElementById('tipoV');
+  var tLabel=tEl&&tEl.selectedIndex>0?tEl.options[tEl.selectedIndex].text:'General';
+  document.getElementById('semLegend').innerHTML='<div style="font-size:10px;font-weight:700;color:var(--mu);width:100%;text-align:center;margin-bottom:4px;text-transform:uppercase;">Semaforo - '+tLabel+'</div>'
+    +'<div class="sem-item"><div class="sem-dot" style="background:#f87171;border:1px solid #dc2626;"></div>Critica ('+rule.rl+')</div>'
+    +'<div class="sem-item"><div class="sem-dot" style="background:#fde68a;border:1px solid #d97706;"></div>Precaucion ('+rule.yl+')</div>'
+    +'<div class="sem-item"><div class="sem-dot" style="background:#6ee7b7;border:1px solid #059669;"></div>Optima ('+rule.gl+')</div>'
+    +'<div class="sem-item"><div class="sem-dot" style="background:var(--bd);"></div>Sin datos</div>';
+}
+
+function buildDiag(){
+  var pos=getPositions();var amap={};
+  pos.forEach(function(p){if(!amap[p.axle])amap[p.axle]=[];amap[p.axle].push(p);});
+  var svg='<svg viewBox="0 0 100 42" width="100" height="42" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="14" width="62" height="24" rx="4" fill="#1a3a5c" opacity="0.12"/><rect x="58" y="6" width="40" height="32" rx="4" fill="#1a3a5c" opacity="0.18"/><rect x="60" y="8" width="14" height="12" rx="2" fill="#3b82f6" opacity="0.4"/><rect x="76" y="8" width="14" height="12" rx="2" fill="#3b82f6" opacity="0.25"/></svg>';
+  var h='<div style="margin-bottom:4px;">'+svg+'</div>';
+  Object.keys(amap).sort(function(a,b){return Number(a)-Number(b);}).forEach(function(k){
+    var tires=amap[k],at=tires[0].atype,n=Number(k);
+    var lbl=n===0?'REP':'G'+n;
+    var badge=at!=='rep'?'<span class="atbadge '+at+'">'+(AT[at]||'')+'</span>':'';
+    var left=tires.filter(function(t){return t.side.indexOf('I')>=0||t.side==='REP';});
+    var right=tires.filter(function(t){return t.side.indexOf('D')>=0;});
+    h+='<div class="axrow"><span class="axlbl">'+lbl+badge+'</span>';
+    left.forEach(function(t){h+=tireBH(t);});
+    h+='<div class="tspc"><div style="width:20px;height:'+(n===0?10:16)+'px;background:var(--p2);border-radius:3px;opacity:.1;"></div></div>';
+    right.forEach(function(t){h+=tireBH(t);});
+    h+='</div>';
+  });
+  document.getElementById('vDiag').innerHTML=h;
+  updateSemLegend();
+}
+
+function tireBH(t){
+  var d=currentVeh.tires[t.id]||{};
+  var sc=getSemClass(d);
+  var sel=currentVeh.sel===t.id?'selected':'';
+  var dot=d._saved?'<div class="saved-dot"></div>':'';
+  var dmg=d.damages&&d.damages.length?'<span style="font-size:8px;">&#x1F534;</span>':'';
+  return '<div class="tbtn '+sc+' '+sel+'" onclick="selTire(\''+t.id+'\',\''+t.label+'\')">'+dot+'<span class="tico">&#x1F6DE;</span><span class="tpnum">'+t.label+'</span><span style="font-size:8px;">'+dmg+'</span></div>';
+}
+
+function updateTFSemTag(){
+  var d={int:gv('tf_int'),cen:gv('tf_cen'),ext:gv('tf_ext')};
+  var sc=getSemClass(d);
+  var el=document.getElementById('tfSemTag');if(!el)return;
+  var map={'':['Sin profundidades','#94a3b8'],'sem-green':['Profundidad Optima','#059669'],'sem-yellow':['Profundidad Precaucion','#d97706'],'sem-red':['Profundidad Critica - Reemplazar','#dc2626']};
+  var m=map[sc]||map[''];el.textContent=m[0];el.style.color=m[1];
+}
+
+function switchIT(i){
+  ['it0','it1','it2','it3'].forEach(function(id,j){document.getElementById(id).classList.toggle('active',j===i);});
+  ['ip0','ip1','ip2','ip3'].forEach(function(id,j){var el=document.getElementById(id);if(el)el.classList.toggle('active',j===i);});
+  if(i===3&&currentVeh.sel)buildDmgUI();
+}
+
+function selTire(id,label){
+  currentVeh.sel=id;
+  if(!currentVeh.tires[id])currentVeh.tires[id]={};
+  var card=document.getElementById('tfCard');card.style.display='block';
+  document.getElementById('tfTitle').textContent='Posicion '+label;
+  var pos=getPositions(),idx=pos.findIndex(function(p){return p.id===id;});
+  document.getElementById('tfProg').textContent=(idx+1)+' / '+pos.length;
+  var d=currentVeh.tires[id];
+  ['marca','disenio','dim','interno','serie','reenc','psi','int','cen','ext','obs','fm','km','obsm'].forEach(function(f){var el=document.getElementById('tf_'+f);if(el)el.value=d[f]||'';});
+  var tipoEl=document.getElementById('tf_tipo');if(tipoEl)tipoEl.value=d.tipo||'';
+  ['bp','rot','alin','des'].forEach(function(f){var el=document.getElementById('tf_'+f);if(el)el.checked=d[f]||false;});
+  ['b','r','m'].forEach(function(c){var el=document.getElementById('cb_'+c);if(el)el.classList.toggle('selected',d.cond===c);});
+  switchIT(0);updateTFSemTag();buildDiag();
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function saveTF(){
+  if(!currentVeh.sel)return;
+  var d=currentVeh.tires[currentVeh.sel]||{};
+  ['marca','disenio','dim','interno','serie','reenc','psi','int','cen','ext','obs','fm','km','obsm'].forEach(function(f){var el=document.getElementById('tf_'+f);if(el)d[f]=el.value;});
+  var tipoEl=document.getElementById('tf_tipo');if(tipoEl)d.tipo=tipoEl.value;
+  ['bp','rot','alin','des'].forEach(function(f){var el=document.getElementById('tf_'+f);if(el)d[f]=el.checked;});
+  currentVeh.tires[currentVeh.sel]=d;buildDiag();updateTFSemTag();
+}
+
+function selCond(c){
+  if(!currentVeh.sel)return;
+  if(!currentVeh.tires[currentVeh.sel])currentVeh.tires[currentVeh.sel]={};
+  currentVeh.tires[currentVeh.sel].cond=c;
+  ['b','r','m'].forEach(function(x){var el=document.getElementById('cb_'+x);if(el)el.classList.toggle('selected',x===c);});
+  buildDiag();
+}
+
+// AUTOCOMPLETE
+function onMarcaInput(){
+  saveTF();
+  var val=gv('tf_marca').toLowerCase().trim();
+  var sugg=document.getElementById('marcaSugg');
+  if(!val){sugg.style.display='none';return;}
+  var m=MARCAS.filter(function(x){return x.toLowerCase().indexOf(val)>=0;});
+  if(!m.length){sugg.style.display='none';return;}
+  sugg.innerHTML=m.map(function(x){return '<div class="ac-item" onclick="pickMarca(\''+x.replace(/'/g,"\\'")+'\')">' +x+'</div>';}).join('');
+  sugg.style.display='block';
+}
+function pickMarca(x){
+  document.getElementById('tf_marca').value=x;document.getElementById('marcaSugg').style.display='none';
+  document.getElementById('tf_disenio').placeholder='Diseno de '+x+'...';document.getElementById('tf_disenio').value='';
+  document.getElementById('disenioSugg').style.display='none';saveTF();
+}
+function onDisenioInput(){
+  saveTF();
+  var marca=gv('tf_marca').trim();var val=gv('tf_disenio').toLowerCase().trim();
+  var sugg=document.getElementById('disenioSugg');
+  var designs=TIRE_CATALOG[marca]||[].concat.apply([],Object.values(TIRE_CATALOG));
+  if(!val){sugg.style.display='none';return;}
+  var seen={};var m=designs.filter(function(d){if(d.toLowerCase().indexOf(val)>=0&&!seen[d]){seen[d]=true;return true;}return false;}).slice(0,10);
+  if(!m.length){sugg.style.display='none';return;}
+  sugg.innerHTML=m.map(function(x){return '<div class="ac-item" onclick="pickDisenio(\''+x.replace(/'/g,"\\'")+'\')">' +x+'</div>';}).join('');
+  sugg.style.display='block';
+}
+function pickDisenio(x){document.getElementById('tf_disenio').value=x;document.getElementById('disenioSugg').style.display='none';saveTF();}
+
+// DAMAGE
+function buildDmgUI(){
+  var id=currentVeh.sel;if(!id)return;
+  if(!currentVeh.tires[id])currentVeh.tires[id]={};
+  if(!currentVeh.tires[id].damages)currentVeh.tires[id].damages=[];
+  var dmgs=currentVeh.tires[id].damages;
+  var h=dmgs.length?'':'<div style="text-align:center;padding:18px;color:var(--mu);font-size:13px;">Sin danos registrados.</div>';
+  dmgs.forEach(function(dmg,i){
+    h+='<div class="dmgblock"><div class="dmghdr"><span>Dano #'+(i+1)+'</span><button onclick="rmDmg('+i+')" style="background:none;border:none;color:var(--dg);font-size:18px;cursor:pointer;">x</button></div>';
+    h+='<div class="dmgbody"><div class="flabel" style="margin-bottom:5px;">Area</div>';
+    h+='<div class="areabts">'+DMG_AREAS.map(function(a){return '<div class="areabtn'+(dmg.area===a?' selected':'')+'" onclick="setDA('+i+',\''+a+'\')">'+a+'</div>';}).join('')+'</div>';
+    h+='<div class="flabel" style="margin-bottom:4px;">Aspecto</div>';
+    h+='<select onchange="setDAsp('+i+',this.value)" style="margin-bottom:8px;"><option value="">Seleccionar...</option>'+DMG_ASPECTS.map(function(a){return '<option value="'+a+'"'+(dmg.aspect===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>';
+    h+='<div style="display:flex;gap:6px;margin-bottom:8px;">'+['Leve','Moderado','Grave'].map(function(g){var s=dmg.grav===g;var col=g==='Leve'?'var(--ok)':g==='Moderado'?'var(--wn)':'var(--dg)';return '<div style="flex:1;padding:8px 4px;border-radius:var(--rs);border:1.5px solid '+(s?col:'var(--bd)')+';background:'+(s?col:'var(--s2)')+';color:'+(s?'#fff':col)+';text-align:center;font-size:12px;font-weight:700;cursor:pointer;" onclick="setDG('+i+',\''+g+'\')">'+g+'</div>';}).join('')+'</div>';
+    h+='<textarea placeholder="Descripcion..." oninput="setDD('+i+',this.value)" style="min-height:50px;">'+( dmg.desc||'')+'</textarea>';
+    h+='</div></div>';
+  });
+  document.getElementById('dmgList').innerHTML=h;
+}
+function addDmg(){if(!currentVeh.sel)return;if(!currentVeh.tires[currentVeh.sel].damages)currentVeh.tires[currentVeh.sel].damages=[];currentVeh.tires[currentVeh.sel].damages.push({area:'',aspect:'',grav:'',desc:''});buildDmgUI();buildDiag();}
+function rmDmg(i){currentVeh.tires[currentVeh.sel].damages.splice(i,1);buildDmgUI();buildDiag();}
+function setDA(i,v){currentVeh.tires[currentVeh.sel].damages[i].area=v;buildDmgUI();}
+function setDAsp(i,v){currentVeh.tires[currentVeh.sel].damages[i].aspect=v;}
+function setDG(i,v){currentVeh.tires[currentVeh.sel].damages[i].grav=v;buildDmgUI();}
+function setDD(i,v){currentVeh.tires[currentVeh.sel].damages[i].desc=v;}
+
+// CONFIRM
+function openConfirm(){
+  if(!currentVeh.sel)return;saveTF();
+  var pos=getPositions().find(function(p){return p.id===currentVeh.sel;});
+  var d=currentVeh.tires[currentVeh.sel]||{};
+  var cl={'b':'Buena','r':'Regular','m':'Mala','':'Sin datos'};
+  var yn=function(v){return v?'Si':'No';};
+  var sc=getSemClass(d);
+  var sl=sc==='sem-red'?'CRITICA':sc==='sem-yellow'?'Precaucion':sc==='sem-green'?'Optima':'Sin datos';
+  var dmgs=d.damages||[];
+  var dmgH='';
+  if(dmgs.length){dmgH='<div class="conf-sec">Danos ('+dmgs.length+')</div>';dmgs.forEach(function(dmg,i){dmgH+='<div class="conf-row"><span>Dano #'+(i+1)+'</span><span>'+(dmg.area||'—')+' | '+(dmg.aspect||'—')+' | '+(dmg.grav||'—')+'</span></div>';});}
+  document.getElementById('confBody').innerHTML=
+    '<div class="conf-sec">Identificacion - '+(pos?pos.label:currentVeh.sel)+'</div>'
+    +'<div class="conf-row"><span>Marca / Diseno</span><span>'+(d.marca||'—')+(d.disenio?' / '+d.disenio:'')+'</span></div>'
+    +'<div class="conf-row"><span>Dimension</span><span>'+(d.dim||'—')+'</span></div>'
+    +'<div class="conf-row"><span># Interno</span><span>'+(d.interno||'—')+'</span></div>'
+    +'<div class="conf-row"><span>Tipo</span><span>'+(d.tipo||'—')+'</span></div>'
+    +'<div class="conf-sec">Medidas</div>'
+    +'<div class="conf-row"><span>Semaforo</span><span>'+sl+'</span></div>'
+    +'<div class="conf-row"><span>Int/Cen/Ext (mm)</span><span>'+(d.int||'—')+' / '+(d.cen||'—')+' / '+(d.ext||'—')+'</span></div>'
+    +'<div class="conf-row"><span>PSI</span><span>'+(d.psi||'—')+'</span></div>'
+    +'<div class="conf-row"><span>Condicion</span><span>'+(cl[d.cond||''])+'</span></div>'
+    +'<div class="conf-row"><span>BP/Rot/Alin/Des</span><span>'+yn(d.bp)+'/'+yn(d.rot)+'/'+yn(d.alin)+'/'+yn(d.des)+'</span></div>'
+    +'<div class="conf-sec">Montaje</div>'
+    +'<div class="conf-row"><span>Fecha</span><span>'+(d.fm||'—')+'</span></div>'
+    +'<div class="conf-row"><span>Km</span><span>'+(d.km||'—')+'</span></div>'
+    +dmgH
+    +'<div class="conf-btns"><button class="cbtn-edit" onclick="closeConf()">Editar</button><button class="cbtn-ok" onclick="saveTire()">Guardar y Continuar</button></div>';
+  document.getElementById('confModal').classList.add('open');
+}
+function closeConf(){document.getElementById('confModal').classList.remove('open');}
+function saveTire(){
+  currentVeh.tires[currentVeh.sel]._saved=true;
+  currentVeh.tires[currentVeh.sel]._savedAt=new Date().toLocaleString('es-CO');
+  currentVeh.tires[currentVeh.sel]._savedBy=session.inspector||'—';
+  buildDiag();closeConf();
+  var pos=getPositions(),idx=pos.findIndex(function(p){return p.id===currentVeh.sel;});
+  if(idx<pos.length-1){selTire(pos[idx+1].id,pos[idx+1].label);}
+  else{document.getElementById('tfCard').style.display='none';currentVeh.sel=null;buildDiag();toast('Todas las posiciones guardadas');}
+}
+
+// CHECKLIST
+function buildChecklist(){
+  var h='';
+  CHECKLIST.forEach(function(item){
+    h+='<div class="chki"><span class="chkico">'+item.icon+'</span><div class="chkb"><div class="chkt">'+item.label+'</div>';
+    h+='<div class="sbts"><button class="sbt ok" data-id="'+item.id+'" data-st="ok" onclick="selSt(\''+item.id+'\',\'ok\',this)">OK</button>';
+    h+='<button class="sbt aten" data-id="'+item.id+'" data-st="aten" onclick="selSt(\''+item.id+'\',\'aten\',this)">Atencion</button>';
+    h+='<button class="sbt urg" data-id="'+item.id+'" data-st="urg" onclick="selSt(\''+item.id+'\',\'urg\',this)">Urgente</button></div>';
+    h+='<textarea class="cnotes" id="cn_'+item.id+'" placeholder="Notas..." oninput="saveCN(\''+item.id+'\')"></textarea></div></div>';
+  });
+  document.getElementById('chkItems').innerHTML=h;
+}
+function selSt(id,st,btn){
+  if(!currentVeh.checklist[id])currentVeh.checklist[id]={};
+  currentVeh.checklist[id].status=st;
+  btn.closest('.chkb').querySelectorAll('.sbt').forEach(function(b){b.classList.remove('selected');});
+  btn.classList.add('selected');
+  var n=btn.closest('.chkb').querySelector('.cnotes');
+  if(st!=='ok')n.classList.add('visible');else n.classList.remove('visible');
+}
+function saveCN(id){if(!currentVeh.checklist[id])currentVeh.checklist[id]={};currentVeh.checklist[id].notes=document.getElementById('cn_'+id).value;}
+
+// MULTI-VEHICLE
+function newVehicle(){
+  if(currentVeh.veh.placa)saveCurrentVehicle(true);
+  currentVeh={veh:{},axles:[{type:'dir',doble:false},{type:'trac',doble:true},{type:'trac',doble:true},{type:'libre',doble:true},{type:'trac',doble:true}],repuesto:false,tires:{},checklist:{},sel:null};
+  ['placa','km','empresa','obsGen'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('tipoV').value='';document.getElementById('incRep').value='no';
+  document.getElementById('tfCard').style.display='none';
+  buildAxleCfgs();buildChecklist();document.getElementById('scNum').textContent=vehicles.length;
+}
+
+function saveCurrentVehicle(silent){
+  if(silent===undefined)silent=false;
+  currentVeh.checklist._obsGen=gv('obsGen');
+  if(!currentVeh.veh.placa){if(!silent)alert('Ingresa la placa del vehiculo.');return;}
+  var idx=vehicles.findIndex(function(v){return v.veh.placa===currentVeh.veh.placa;});
+  var snap=JSON.parse(JSON.stringify(currentVeh));snap._savedAt=new Date().toLocaleString('es-CO');snap._inspector=session.inspector;
+  if(idx>=0)vehicles[idx]=snap;else vehicles.push(snap);
+  document.getElementById('scNum').textContent=vehicles.length;
+  document.getElementById('sessionBadge').textContent='Sesion: '+vehicles.length+' veh.';
+  if(!silent){toast('Guardado: '+currentVeh.veh.placa+' ('+vehicles.length+' veh.)');goTab(5);}
+}
+
+function loadVehicle(idx){
+  currentVeh=JSON.parse(JSON.stringify(vehicles[idx]));
+  var v=currentVeh.veh;
+  ['placa','km','empresa'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=v[id]||'';});
+  document.getElementById('tipoV').value=v.tipo||'';
+  document.getElementById('incRep').value=currentVeh.repuesto?'si':'no';
+  document.getElementById('obsGen').value=currentVeh.checklist._obsGen||'';
+  buildAxleCfgs();buildChecklist();buildDiag();goTab(2);
+}
+
+function buildSessionList(){
+  if(!vehicles.length){document.getElementById('sessionList').innerHTML='<div style="text-align:center;padding:24px;color:var(--mu);">Sin vehiculos registrados.</div>';return;}
+  var h='<div class="session-list">';
+  vehicles.forEach(function(sv,i){
+    var pos=getPosFromVeh(sv);
+    var saved=pos.filter(function(p){return sv.tires[p.id]&&sv.tires[p.id]._saved;}).length;
+    var malas=pos.filter(function(p){var d=sv.tires[p.id]||{};return d.cond==='m';}).length;
+    var semR=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-red';}).length;
+    var urg=Object.values(sv.checklist).filter(function(c){return c&&c.status==='urg';}).length;
+    var active=currentVeh.veh.placa===sv.veh.placa?'active-session':'';
+    h+='<div class="session-item '+active+'" onclick="loadVehicle('+i+')">';
+    h+='<div style="font-size:24px;">&#x1F69B;</div>';
+    h+='<div class="session-meta"><div class="session-plate">'+(sv.veh.placa||'Sin placa')+'</div>';
+    h+='<div class="session-info">'+(sv.veh.empresa||'')+'</div>';
+    h+='<div class="session-status"><span class="stag info">'+saved+'/'+pos.length+' insp.</span>';
+    if(malas>0)h+='<span class="stag danger">'+malas+' malas</span>';
+    if(semR>0)h+='<span class="stag danger">'+semR+' criticas</span>';
+    if(urg>0)h+='<span class="stag warn">'+urg+' urgentes</span>';
+    h+='</div></div></div>';
+  });
+  h+='</div>';document.getElementById('sessionList').innerHTML=h;
+}
+
+// MASS ENTRY
+function openMass(){
+  var pos=getPositions();var amap={};
+  pos.forEach(function(p){if(!amap[p.axle])amap[p.axle]={atype:p.atype,tires:[]};amap[p.axle].tires.push(p);});
+  var h='';
+  Object.keys(amap).sort(function(a,b){return Number(a)-Number(b);}).forEach(function(k){
+    var n=Number(k),ag=amap[k],at=ag.atype;
+    var hc=at==='dir'?'dir':at==='trac'?'trac':at==='libre'?'libre':'rep';
+    h+='<div class="ablk"><div class="abh '+hc+'">'+(n===0?'Repuesto':'G'+n+' - '+(AT[at]||''))+'</div><div class="abb">';
+    ag.tires.forEach(function(t){
+      var d=currentVeh.tires[t.id]||{};
+      h+='<div class="mrow"><div class="mplbl">'+t.label+'</div>';
+      h+='<div class="mdep"><input type="number" id="mi_i_'+t.id+'" placeholder="Int" step="0.5" min="0" max="30" value="'+(d.int||'')+'"><input type="number" id="mi_c_'+t.id+'" placeholder="Cen" step="0.5" min="0" max="30" value="'+(d.cen||'')+'"><input type="number" id="mi_e_'+t.id+'" placeholder="Ext" step="0.5" min="0" max="30" value="'+(d.ext||'')+'"></div>';
+      h+='<input type="number" id="mi_p_'+t.id+'" placeholder="PSI" value="'+(d.psi||'')+'" style="width:60px;padding:7px 3px;font-size:12px;">';
+      h+='<select id="mi_co_'+t.id+'" style="width:90px;padding:7px 3px;font-size:11px;"><option value="">Cond.</option><option value="b"'+(d.cond==='b'?' selected':'')+'>Buena</option><option value="r"'+(d.cond==='r'?' selected':'')+'>Regular</option><option value="m"'+(d.cond==='m'?' selected':'')+'>Mala</option></select>';
+      h+='<input type="date" id="mi_fm_'+t.id+'" value="'+(d.fm||'')+'" style="width:115px;" title="Fecha montaje">';
+      h+='<input type="number" id="mi_km_'+t.id+'" placeholder="Km" value="'+(d.km||'')+'" style="width:80px;padding:7px 3px;">';
+      h+='<label class="mchk"><input type="checkbox" id="mi_d_'+t.id+'"'+(d.des?' checked':'')+'>Des.</label>';
+      h+='<label class="mchk"><input type="checkbox" id="mi_b_'+t.id+'"'+(d.bp?' checked':'')+'>BP</label></div>';
+    });
+    h+='</div></div>';
+  });
+  h+='<button class="btn-pri" onclick="applyMass()">Aplicar Todos los Datos</button>';
+  document.getElementById('massBody').innerHTML=h;
+  document.getElementById('massModal').classList.add('open');
+}
+function closeMass(){document.getElementById('massModal').classList.remove('open');}
+function applyMass(){
+  getPositions().forEach(function(t){
+    if(!currentVeh.tires[t.id])currentVeh.tires[t.id]={};
+    var d=currentVeh.tires[t.id];
+    function gg(id){var el=document.getElementById(id);return el?el.value:'';}
+    d.int=gg('mi_i_'+t.id);d.cen=gg('mi_c_'+t.id);d.ext=gg('mi_e_'+t.id);
+    d.psi=gg('mi_p_'+t.id);var co=gg('mi_co_'+t.id);if(co)d.cond=co;
+    d.fm=gg('mi_fm_'+t.id);d.km=gg('mi_km_'+t.id);
+    var de=document.getElementById('mi_d_'+t.id);if(de)d.des=de.checked;
+    var bp=document.getElementById('mi_b_'+t.id);if(bp)d.bp=bp.checked;
+  });
+  buildDiag();closeMass();
+}
+
+// REPORTS
+function switchRTab(i){
+  ['rt0','rt1','rt2','rt3','rt4'].forEach(function(id,j){document.getElementById(id).classList.toggle('active',j===i);});
+  ['rp0','rp1','rp2','rp3','rp4'].forEach(function(id,j){document.getElementById(id).classList.toggle('active',j===i);});
+}
+function buildReports(){buildRM();buildRD();buildRMt();buildRI();buildRTraz();}
+
+function buildRM(){
+  var vl=vehicles.length?vehicles:[currentVeh];var allH='';
+  vl.forEach(function(sv){
+    var chkR='';
+    CHECKLIST.forEach(function(item){var c=sv.checklist[item.id]||{};var b=c.status==='ok'?'<span class="rb ok">OK</span>':c.status==='aten'?'<span class="rb aten">Atencion</span>':c.status==='urg'?'<span class="rb urg">Urgente</span>':'<span class="rb pend">Sin revisar</span>';chkR+='<tr><td>'+item.label+'</td><td>'+b+'</td><td style="font-size:11px;">'+(c.notes||'—')+'</td></tr>';});
+    allH+='<div style="margin-bottom:14px;padding:10px;background:var(--s2);border-radius:var(--rs);border-left:3px solid var(--p2);"><div style="font-weight:700;font-size:13px;color:var(--p2);margin-bottom:8px;">'+(sv.veh.placa||'Sin placa')+'</div><table class="rtbl"><thead><tr><th>Item</th><th>Estado</th><th>Notas</th></tr></thead><tbody>'+chkR+'</tbody></table></div>';
+  });
+  document.getElementById('rMaint').innerHTML='<div class="rtitle">Checklist por Vehiculo</div>'+allH;
+}
+function buildRD(){
+  var vl=vehicles.length?vehicles:[currentVeh];var rows='';
+  vl.forEach(function(sv){getPosFromVeh(sv).forEach(function(p){var d=sv.tires[p.id]||{};(d.damages||[]).forEach(function(dmg){var gc=dmg.grav==='Leve'?'ok':dmg.grav==='Moderado'?'aten':'urg';rows+='<tr><td><b>'+(sv.veh.placa||'—')+'</b></td><td>'+p.label+'</td><td><span class="rb info">'+(dmg.area||'—')+'</span></td><td>'+(dmg.aspect||'—')+'</td><td><span class="rb '+gc+'">'+(dmg.grav||'—')+'</span></td><td style="font-size:11px;">'+(dmg.desc||'—')+'</td></tr>';});});});
+  document.getElementById('rDmg').innerHTML='<div class="rtitle">Registro de Danos</div>'+(rows?'<table class="rtbl"><thead><tr><th>Veh.</th><th>Pos.</th><th>Area</th><th>Aspecto</th><th>Grav.</th><th>Descripcion</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p style="text-align:center;padding:18px;color:var(--mu);">Sin danos registrados.</p>');
+}
+function buildRMt(){
+  var vl=vehicles.length?vehicles:[currentVeh];var rows='';
+  vl.forEach(function(sv){getPosFromVeh(sv).forEach(function(p){var d=sv.tires[p.id]||{};if(d.fm||d.km)rows+='<tr><td><b>'+(sv.veh.placa||'—')+'</b></td><td>'+p.label+'</td><td>'+(d.fm||'—')+'</td><td>'+(d.km||'—')+'</td><td>'+(d.marca||'—')+'</td><td>'+(d.dim||'—')+'</td></tr>';});});
+  document.getElementById('rMount').innerHTML='<div class="rtitle">Historial de Montaje</div>'+(rows?'<table class="rtbl"><thead><tr><th>Veh.</th><th>Pos.</th><th>F.Montaje</th><th>Km</th><th>Marca</th><th>Dim.</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p style="text-align:center;padding:18px;color:var(--mu);">Sin datos de montaje.</p>');
+}
+function buildRI(){
+  var vl=vehicles.length?vehicles:[currentVeh];var rows='';
+  vl.forEach(function(sv){getPosFromVeh(sv).forEach(function(p){var d=sv.tires[p.id]||{};var sc=getSemClass(d,sv.veh.tipo);var sb=sc==='sem-red'?'<span class="rb urg">Critica</span>':sc==='sem-yellow'?'<span class="rb aten">Precaucion</span>':sc==='sem-green'?'<span class="rb ok">Optima</span>':'—';var sv2=d._saved?'<span class="rb ok">Guardada</span>':'<span class="rb pend">Pendiente</span>';rows+='<tr><td><b>'+(sv.veh.placa||'—')+'</b></td><td>'+p.label+'</td><td>'+(d.marca||'—')+'</td><td>'+(d.disenio||'—')+'</td><td>'+(d.dim||'—')+'</td><td>'+(d.interno||'—')+'</td><td>'+sb+'</td><td>'+sv2+'</td></tr>';});});
+  document.getElementById('rIdent').innerHTML='<div class="rtitle">Identificacion</div><table class="rtbl"><thead><tr><th>Veh.</th><th>Pos.</th><th>Marca</th><th>Diseno</th><th>Dim.</th><th>#Int</th><th>Semaforo</th><th>Estado</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+function buildRTraz(){
+  var vl=vehicles.length?vehicles:[currentVeh];var cards='';
+  vl.forEach(function(sv){
+    var pos=getPosFromVeh(sv);
+    var saved=pos.filter(function(p){return sv.tires[p.id]&&sv.tires[p.id]._saved;}).length;
+    var pend=pos.length-saved;
+    var semR=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-red';}).length;
+    cards+='<div style="border:1px solid var(--bd);border-radius:var(--rs);overflow:hidden;margin-bottom:12px;">';
+    cards+='<div style="background:var(--p2);color:#fff;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;"><b>'+(sv.veh.placa||'Sin placa')+'</b><span style="font-size:11px;opacity:.75;">'+(sv._inspector||'—')+'</span></div>';
+    cards+='<div style="padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;background:var(--s2);">';
+    cards+='<div><div style="font-size:18px;font-weight:900;color:var(--p3);">'+pos.length+'</div><div style="font-size:9px;color:var(--mu);text-transform:uppercase;">Total</div></div>';
+    cards+='<div><div style="font-size:18px;font-weight:900;color:var(--ok);">'+saved+'</div><div style="font-size:9px;color:var(--mu);text-transform:uppercase;">Insp.</div></div>';
+    cards+='<div><div style="font-size:18px;font-weight:900;color:'+(pend>0?'var(--wn)':'var(--mu)')+';">'+pend+'</div><div style="font-size:9px;color:var(--mu);text-transform:uppercase;">Pend.</div></div>';
+    cards+='<div><div style="font-size:18px;font-weight:900;color:'+(semR>0?'var(--dg)':'var(--mu)')+';">'+semR+'</div><div style="font-size:9px;color:var(--mu);text-transform:uppercase;">Criticas</div></div>';
+    cards+='</div>';
+    cards+='<div class="traz-wrap" style="margin:0;border:none;border-top:1px solid var(--bd);"><div class="traz-hdr"><span>Pos.</span><span>Identificacion</span><span>Semaforo</span><span>Estado</span></div>';
+    pos.forEach(function(p){var d=sv.tires[p.id]||{};var sc=getSemClass(d,sv.veh.tipo);var sd=sc==='sem-red'?'Critica':sc==='sem-yellow'?'Precaucion':sc==='sem-green'?'Optima':'—';var st=d._saved?'<span class="rb ok">Hecha</span>':'<span class="rb pend">Pendiente</span>';var id2=d.marca?d.marca+(d.disenio?' '+d.disenio:''):'Sin datos';cards+='<div class="traz-row"><span class="traz-num">'+p.label+'</span><span style="font-size:11px;">'+id2+'</span><span style="font-size:11px;">'+(d.int||'—')+'/'+(d.cen||'—')+'/'+(d.ext||'—')+' mm</span><span>'+st+'</span></div>';});
+    cards+='</div></div>';
+  });
+  document.getElementById('rTraz').innerHTML='<div class="rtitle">Trazabilidad por Vehiculo</div>'+cards;
+}
+
+// ── EXPORT EXCEL (.xlsx) con SheetJS ──
+function exportExcel(){
+  try{
+    if(typeof XLSX==='undefined'){alert('Libreria Excel no cargada. Intenta de nuevo.');return;}
+    var vl=vehicles.length?vehicles:[currentVeh];
+    var cl={'b':'Buena','r':'Regular','m':'Mala','':'Sin datos'};
+    var sl=function(d,tipo){var s=getSemClass(d,tipo||'');return s==='sem-red'?'Critica':s==='sem-yellow'?'Precaucion':s==='sem-green'?'Optima':'Sin datos';};
+
+    // Encabezados exactos segun "Data rodando"
+    var headers=[
+      'Equipo',
+      'Fecha Inspeccion',
+      'Posicion',
+      'Nueva/Reencauche',
+      'Eje',
+      'Marca',
+      'Diseno',
+      '# Interno',
+      'Dimension',
+      'Banda Reencauche',
+      'Km Actual',
+      'Psi Encontrada',
+      'EXT',
+      'CEN',
+      'INT',
+      'Reporte Rotacion',
+      'Posicion Inicial',
+      'Posicion Final',
+      'Metodo de Rotacion',
+      'Cantidad de Rotaciones Realizadas',
+      'Reporte Alineacion',
+      'Aspectos de Mantenimiento',
+      'Presion Encontrada',
+      'Danos encontrados',
+      'Km Montaje',
+      'Fecha Montaje'
+    ];
+
+    var rows=[headers];
+
+    vl.forEach(function(sv){
+      if(!sv||!sv.veh)return;
+      var pos=getPosFromVeh(sv);
+      pos.forEach(function(p){
+        var d=sv.tires[p.id]||{};
+
+        // Eje segun tipo
+        var ejeLabel=p.atype==='dir'?'Direccion':p.atype==='trac'?'Traccion':p.atype==='libre'?'Libre':p.atype==='rep'?'Repuesto':'—';
+
+        // Aspectos de mantenimiento del checklist
+        var aspectos=[];
+        CHECKLIST.forEach(function(item){
+          var c=sv.checklist[item.id]||{};
+          if(c.status&&c.status!=='ok')aspectos.push(item.label+(c.notes?' ('+c.notes+')':''));
+        });
+
+        // Danos encontrados
+        var danos=[];
+        if(d.damages&&d.damages.length){
+          d.damages.forEach(function(dmg){
+            var txt=[];
+            if(dmg.area)txt.push(dmg.area);
+            if(dmg.aspect)txt.push(dmg.aspect);
+            if(dmg.grav)txt.push(dmg.grav);
+            if(dmg.desc)txt.push(dmg.desc);
+            danos.push(txt.join(' - '));
+          });
+        }
+
+        // Flags individuales por llanta
+        var rotacion=d.rot?'Si':'No';
+        var alineacion=d.alin?'Si':'No';
+        var presionEncontrada=d.bp?'Baja presion detectada':'Normal';
+
+        rows.push([
+          sv.veh.placa||'',           // Equipo
+          sv._savedAt?sv._savedAt.split(',')[0]:(session.fecha||''), // Fecha Inspeccion
+          p.label,                    // Posicion
+          d.tipo||'',                 // Nueva/Reencauche
+          ejeLabel,                   // Eje
+          d.marca||'',                // Marca
+          d.disenio||'',              // Diseno
+          d.interno||'',              // # Interno
+          d.dim||'',                  // Dimension
+          d.reenc||'',                // Banda Reencauche (No de reencauche)
+          sv.veh.km||'',              // Km Actual
+          d.psi||'',                  // Psi Encontrada
+          d.ext||'',                  // EXT
+          d.cen||'',                  // CEN
+          d.int||'',                  // INT
+          rotacion,                   // Reporte Rotacion
+          '',                         // Posicion Inicial (manual en campo)
+          '',                         // Posicion Final (manual en campo)
+          '',                         // Metodo de Rotacion
+          '',                         // Cantidad de Rotaciones Realizadas
+          alineacion,                 // Reporte Alineacion
+          aspectos.join(' | ')||'',   // Aspectos de Mantenimiento
+          presionEncontrada,          // Presion Encontrada
+          danos.join(' | ')||'',      // Danos encontrados
+          d.km||'',                   // Km Montaje
+          d.fm||''                    // Fecha Montaje
+        ]);
+      });
+    });
+
+    // Crear workbook con SheetJS
+    var wb=XLSX.utils.book_new();
+    var ws=XLSX.utils.aoa_to_sheet(rows);
+
+    // Ancho de columnas
+    var wscols=[
+      {wch:12},{wch:16},{wch:10},{wch:16},{wch:12},
+      {wch:14},{wch:12},{wch:12},{wch:14},{wch:16},
+      {wch:12},{wch:14},{wch:8},{wch:8},{wch:8},
+      {wch:16},{wch:14},{wch:14},{wch:18},{wch:28},
+      {wch:18},{wch:28},{wch:18},{wch:28},{wch:12},{wch:14}
+    ];
+    ws['!cols']=wscols;
+
+    // Estilo encabezado (fila 1)
+    var range=XLSX.utils.decode_range(ws['!ref']);
+    for(var C=range.s.c;C<=range.e.c;C++){
+      var addr=XLSX.utils.encode_cell({r:0,c:C});
+      if(!ws[addr])continue;
+      ws[addr].s={
+        font:{bold:true,color:{rgb:'FFFFFF'},sz:11},
+        fill:{fgColor:{rgb:'1A3A5C'}},
+        alignment:{horizontal:'center',vertical:'center',wrapText:true},
+        border:{bottom:{style:'medium',color:{rgb:'CC0000'}}}
+      };
+    }
+
+    // Hoja con nombre "Data rodando"
+    XLSX.utils.book_append_sheet(wb,ws,'Data rodando');
+
+    // Hoja resumen sesion
+    var resumenData=[
+      ['REPORTE DE VISITA - SMARTTIRE IA.XPTA'],
+      [''],
+      ['Empresa:',session.empresa||''],
+      ['Ciudad:',session.ciudad||''],
+      ['Inspector:',session.inspector||''],
+      ['Fecha:',session.fecha||''],
+      ['Hora inicio:',session.hinicio||''],
+      ['Hora fin:',session.hfin||''],
+      ['Contacto:',session.contacto||''],
+      ['Email:',session.email||''],
+      ['WhatsApp:',session.whatsapp||''],
+      [''],
+      ['RESUMEN POR VEHICULO'],
+      ['Placa','Tipo','Km','Llantas Insp.','Criticas','Precaucion','Para Desmontar','Urgentes','Danos']
+    ];
+    vehicles.forEach(function(sv){
+      if(!sv||!sv.veh)return;
+      var pos=getPosFromVeh(sv);
+      var insp=pos.filter(function(pp){return sv.tires[pp.id]&&sv.tires[pp.id]._saved;}).length;
+      var red=pos.filter(function(pp){return getSemClass(sv.tires[pp.id]||{},sv.veh.tipo)==='sem-red';}).length;
+      var yel=pos.filter(function(pp){return getSemClass(sv.tires[pp.id]||{},sv.veh.tipo)==='sem-yellow';}).length;
+      var des=pos.filter(function(pp){return sv.tires[pp.id]&&sv.tires[pp.id].des;}).length;
+      var urg=Object.values(sv.checklist).filter(function(c){return c&&c.status==='urg';}).length;
+      var dmg=Object.values(sv.tires).reduce(function(a,d){return a+(d&&d.damages?d.damages.length:0);},0);
+      resumenData.push([sv.veh.placa||'',sv.veh.tipo||'',sv.veh.km||'',insp+'/'+pos.length,red,yel,des,urg,dmg]);
+    });
+    var ws2=XLSX.utils.aoa_to_sheet(resumenData);
+    ws2['!cols']=[{wch:20},{wch:16},{wch:12},{wch:14},{wch:10},{wch:12},{wch:16},{wch:10},{wch:8}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Resumen Visita');
+
+    // Descargar
+    var fname='SmartTire_'+(session.empresa||'Inspeccion').replace(/[^a-zA-Z0-9]/g,'_')+'_'+(session.fecha||new Date().toISOString().split('T')[0])+'.xlsx';
+    XLSX.writeFile(wb,fname);
+    toast('Excel descargado: '+fname);
+  }catch(err){
+    alert('Error al generar Excel: '+err.message);
+  }
+}
+
+// ── EXPORT HTML REPORT ──
+function exportHTMLReport(){
+  try{
+    saveSession();
+    var vl=vehicles.length?vehicles:[currentVeh];
+    var totalVeh=vl.length;
+    var totalInsp=0,totalRed=0,totalYel=0,totalDmg=0,totalUrg=0;
+    vl.forEach(function(sv){
+      if(!sv||!sv.veh)return;
+      var pos=getPosFromVeh(sv);
+      totalInsp+=pos.filter(function(p){return sv.tires[p.id]&&sv.tires[p.id]._saved;}).length;
+      totalRed+=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-red';}).length;
+      totalYel+=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-yellow';}).length;
+      totalDmg+=Object.values(sv.tires).reduce(function(a,d){return a+(d&&d.damages?d.damages.length:0);},0);
+      totalUrg+=Object.values(sv.checklist).filter(function(c){return c&&c.status==='urg';}).length;
+    });
+    var dur=(session.hinicio&&session.hfin)?session.hinicio+' - '+session.hfin:'No registrada';
+    var vehRows='';
+    vl.forEach(function(sv){
+      if(!sv||!sv.veh)return;
+      var pos=getPosFromVeh(sv);
+      var insp=pos.filter(function(p){return sv.tires[p.id]&&sv.tires[p.id]._saved;}).length;
+      var red=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-red';}).length;
+      var yel=pos.filter(function(p){return getSemClass(sv.tires[p.id]||{},sv.veh.tipo)==='sem-yellow';}).length;
+      var des=pos.filter(function(p){return sv.tires[p.id]&&sv.tires[p.id].des;}).length;
+      var urg=Object.values(sv.checklist).filter(function(c){return c&&c.status==='urg';}).length;
+      var dmg=Object.values(sv.tires).reduce(function(a,d){return a+(d&&d.damages?d.damages.length:0);},0);
+      vehRows+='<tr>'
+        +'<td style="padding:8px;font-weight:700;color:#1a3a5c;">'+(sv.veh.placa||'—')+'</td>'
+        +'<td style="padding:8px;font-size:11px;">'+(sv.veh.tipo||'—')+'</td>'
+        +'<td style="padding:8px;">'+(sv.veh.km||'—')+' km</td>'
+        +'<td style="padding:8px;text-align:center;"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+insp+'/'+pos.length+'</span></td>'
+        +'<td style="padding:8px;text-align:center;">'+(red>0?'<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+red+'</span>':'—')+'</td>'
+        +'<td style="padding:8px;text-align:center;">'+(yel>0?'<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+yel+'</span>':'—')+'</td>'
+        +'<td style="padding:8px;text-align:center;">'+(des>0?'<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+des+'</span>':'—')+'</td>'
+        +'<td style="padding:8px;text-align:center;">'+(urg>0?'<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+urg+'</span>':'—')+'</td>'
+        +'<td style="padding:8px;text-align:center;">'+(dmg>0?'<span style="background:#f3e8ff;color:#6b21a8;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;">'+dmg+'</span>':'—')+'</td>'
+        +'</tr>';
+    });
+    var alertas='';
+    if(totalRed>0)alertas+='<div style="margin-bottom:8px;padding:10px;background:#fee2e2;border-radius:8px;font-size:13px;font-weight:600;color:#991b1b;">'+totalRed+' llanta(s) con profundidad CRITICA - requieren reemplazo inmediato.</div>';
+    if(totalUrg>0)alertas+='<div style="margin-bottom:8px;padding:10px;background:#fef3c7;border-radius:8px;font-size:13px;font-weight:600;color:#92400e;">'+totalUrg+' novedad(es) URGENTE(s) detectadas.</div>';
+    if(totalDmg>0)alertas+='<div style="padding:10px;background:#f3e8ff;border-radius:8px;font-size:13px;font-weight:600;color:#6b21a8;">'+totalDmg+' dano(s) registrado(s).</div>';
+    var css='body{font-family:Segoe UI,sans-serif;margin:0;background:#f0f4f8;color:#0f172a;}'
+      +'.cover{background:linear-gradient(135deg,#0f1c2e,#1a3a5c,#1e4d8c);color:#fff;padding:32px 28px 24px;}'
+      +'.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px;background:#fff;}'
+      +'.kpi{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center;}'
+      +'.kpi-n{font-size:26px;font-weight:900;color:#1a3a5c;}.kpi-l{font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;}'
+      +'.section{background:#fff;margin:8px;border-radius:10px;overflow:hidden;}'
+      +'.sh{background:#1a3a5c;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;}'
+      +'table{width:100%;border-collapse:collapse;font-size:12px;}th{background:#1a3a5c;color:#fff;padding:8px;text-align:left;}td{padding:7px 8px;border-bottom:1px solid #e2e8f0;}'
+      +'.footer{text-align:center;padding:18px;font-size:11px;color:#94a3b8;background:#fff;margin:8px;border-radius:10px;}'
+      +'@media print{body{background:#fff;}}';
+    var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Reporte SmartTire</title><style>'+css+'</style></head><body>'
+      +'<div class="cover">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">'
+      +'<div style="background:#fff;border-radius:8px;padding:5px 12px;display:inline-flex;align-items:center;">'
+      +'<div style="width:22px;height:22px;border:4px solid #cc0000;border-radius:50%;margin-right:3px;"></div>'
+      +'<span style="color:#cc0000;font-size:19px;font-weight:900;font-family:Arial Black,sans-serif;">Red</span>'
+      +'<span style="color:#111;font-size:19px;font-weight:900;font-family:Arial Black,sans-serif;">llantas</span>'
+      +'</div>'
+      +'<div style="border-left:1px solid rgba(255,255,255,.3);padding-left:12px;">'
+      +'<div style="font-size:10px;color:#fbbf24;font-weight:700;text-transform:uppercase;">Programa de Soporte Tecnico a Flotas Vehiculares</div>'
+      +'<div style="font-size:11px;opacity:.6;">SmartTire IA.Xpta - Fleet Analyst Pro</div>'
+      +'</div></div>'
+      +'<h1 style="font-size:20px;margin:0 0 4px;">Reporte de Visita Tecnica de Inspeccion</h1>'
+      +'<p style="margin:0;font-size:13px;opacity:.75;">'+(session.empresa||'Empresa')+' - '+(session.ciudad||'')+' - '+(session.fecha||'')+'</p>'
+      +'<p style="margin-top:8px;font-size:12px;opacity:.6;">Inspector: '+(session.inspector||'—')+' - Duracion: '+dur+'</p>'
+      +'</div>'
+      +'<div class="kpis">'
+      +'<div class="kpi"><div class="kpi-n">'+totalVeh+'</div><div class="kpi-l">Vehiculos</div></div>'
+      +'<div class="kpi"><div class="kpi-n">'+totalInsp+'</div><div class="kpi-l">Llantas Insp.</div></div>'
+      +'<div class="kpi"><div class="kpi-n" style="color:#dc2626;">'+totalRed+'</div><div class="kpi-l">Criticas</div></div>'
+      +'<div class="kpi"><div class="kpi-n" style="color:#d97706;">'+totalYel+'</div><div class="kpi-l">Precaucion</div></div>'
+      +'</div>'
+      +'<div class="section"><div class="sh">Datos de la Visita</div><div style="padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">'
+      +'<div><span style="color:#64748b;font-weight:600;">Empresa:</span> '+(session.empresa||'—')+'</div>'
+      +'<div><span style="color:#64748b;font-weight:600;">Ciudad:</span> '+(session.ciudad||'—')+'</div>'
+      +'<div><span style="color:#64748b;font-weight:600;">Inspector:</span> '+(session.inspector||'—')+'</div>'
+      +'<div><span style="color:#64748b;font-weight:600;">Fecha:</span> '+(session.fecha||'—')+'</div>'
+      +'<div><span style="color:#64748b;font-weight:600;">Duracion:</span> '+dur+'</div>'
+      +'<div><span style="color:#64748b;font-weight:600;">Contacto:</span> '+(session.contacto||'—')+'</div>'
+      +'</div></div>'
+      +'<div class="section"><div class="sh">Resumen por Vehiculo</div>'
+      +'<div style="overflow-x:auto;"><table><thead><tr><th>Placa</th><th>Tipo</th><th>Km</th><th>Insp.</th><th>Criticas</th><th>Precaucion</th><th>Desmont.</th><th>Urgentes</th><th>Danos</th></tr></thead><tbody>'+vehRows+'</tbody></table></div></div>'
+      +(alertas?'<div class="section" style="border-left:4px solid #dc2626;"><div class="sh" style="background:#dc2626;">Alertas de la Visita</div><div style="padding:14px 16px;">'+alertas+'</div></div>':'')
+      +'<div class="footer">SmartTire IA.Xpta - Fleet Analyst Pro - RedLlantas<br>'
+      +'Generado: '+new Date().toLocaleString('es-CO')
+      +(session.email?'<br>Email: '+session.email:'')
+      +(session.whatsapp?' - WhatsApp: '+session.whatsapp:'')
+      +'<br>flotasbog1@redllantas.com'
+      +'</div></body></html>';
+    var blob=new Blob([html],{type:'text/html;charset=utf-8;'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    a.download='Reporte_SmartTire_'+(session.empresa||'visita').replace(/[^a-zA-Z0-9]/g,'_')+'_'+(session.fecha||new Date().toISOString().split('T')[0])+'.html';
+    a.style.display='none';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){if(a.parentNode)a.parentNode.removeChild(a);URL.revokeObjectURL(url);},500);
+    toast('Reporte PDF generado');
+  }catch(err){alert('Error al generar reporte: '+err.message);}
+}
+
+// METRICS
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+function avgArr(arr){return arr.length?Math.round(arr.reduce(function(a,b){return a+b;},0)/arr.length):0;}
+function buildMetrics(){
+  if(typeof Chart==='undefined')return;
+  var sel=document.getElementById('met_veh');
+  if(sel){
+    var cur=sel.value;
+    sel.innerHTML='<option value="__all__">Todos</option>';
+    vehicles.forEach(function(sv,i){var opt=document.createElement('option');opt.value=i;opt.textContent=sv.veh.placa||('Veh '+(i+1));sel.appendChild(opt);});
+    if(currentVeh.veh.placa&&!vehicles.find(function(v){return v.veh.placa===currentVeh.veh.placa;})){var opt=document.createElement('option');opt.value='__current__';opt.textContent=currentVeh.veh.placa+' (actual)';sel.appendChild(opt);}
+    sel.value=cur||'__all__';
+  }
+  var vehIdx=sel?sel.value:'__all__';
+  var costoBase=parseFloat(document.getElementById('met_costo')?document.getElementById('met_costo').value:1200000)||1200000;
+  var vehs=[];
+  if(vehIdx==='__all__'){vehs=vehicles.slice();if(currentVeh.veh.placa&&!vehicles.find(function(v){return v.veh.placa===currentVeh.veh.placa;}))vehs.push(currentVeh);}
+  else if(vehIdx==='__current__'){vehs=[currentVeh];}
+  else{vehs=[vehicles[parseInt(vehIdx)]||currentVeh];}
+  if(!vehs.length)vehs=[currentVeh];
+  var rows=[];
+  vehs.forEach(function(sv){
+    var pos=getPosFromVeh(sv);var kmActual=parseFloat(sv.veh.km)||0;
+    var rule=SEM[sv.veh.tipo||'']||SEM['default'];var profMin=rule.red;
+    pos.forEach(function(p){
+      var d=sv.tires[p.id]||{};var kmMontaje=parseFloat(d.km)||0;
+      var kmRec=kmMontaje>0&&kmActual>0?Math.max(0,kmActual-kmMontaje):0;
+      var depVals=[d.int,d.cen,d.ext].map(function(v){return parseFloat(v);}).filter(function(v){return !isNaN(v);});
+      var depProm=depVals.length?depVals.reduce(function(a,b){return a+b;},0)/depVals.length:null;
+      var depNueva=20;var kmProy=0,vidaRest=0,cpk=0;
+      if(depProm!==null&&kmRec>0&&depProm>profMin){var desgaste=depNueva-depProm;if(desgaste>0){var rate=kmRec/desgaste;var depRestante=depProm-profMin;kmProy=Math.round(kmRec+(rate*depRestante));vidaRest=Math.round((depRestante/(depNueva-profMin))*100);cpk=kmProy>0?Math.round(costoBase/kmProy):0;}}
+      else if(depProm!==null&&depProm<=profMin){vidaRest=0;kmProy=kmRec;cpk=kmProy>0?Math.round(costoBase/kmProy):0;}
+      rows.push({placa:sv.veh.placa||'—',pos:p.label,atype:p.atype,axle:p.axle,marca:d.marca||'—',disenio:d.disenio||'—',depProm:depProm!==null?Math.round(depProm*10)/10:null,kmRec:kmRec,kmProy:kmProy,vidaRest:vidaRest,cpk:cpk,profMin:profMin});
+    });
+  });
+  if(!rows.length){document.getElementById('metKpis').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--mu);font-size:13px;">Sin datos. Ingresa km de montaje y profundidades.</div>';return;}
+  var withData=rows.filter(function(r){return r.kmProy>0;});
+  var avgVida=withData.length?Math.round(withData.reduce(function(a,r){return a+r.vidaRest;},0)/withData.length):0;
+  var avgCpk=withData.length?Math.round(withData.reduce(function(a,r){return a+r.cpk;},0)/withData.length):0;
+  var criticas=rows.filter(function(r){return r.vidaRest<=10&&r.depProm!==null;}).length;
+  document.getElementById('metKpis').innerHTML=
+    '<div class="kpi-card-met"><div class="kpi-n">'+rows.length+'</div><div class="kpi-l">Llantas</div></div>'
+    +'<div class="kpi-card-met"><div class="kpi-n" style="color:'+(avgVida<25?'var(--dg)':avgVida<60?'var(--wn)':'var(--ok)')+';">'+avgVida+'%</div><div class="kpi-l">Vida util prom.</div></div>'
+    +'<div class="kpi-card-met"><div class="kpi-n" style="font-size:18px;">'+(avgCpk>0?'$'+avgCpk.toLocaleString('es-CO'):'—')+'</div><div class="kpi-l">CPK promedio</div></div>'
+    +'<div class="kpi-card-met"><div class="kpi-n" style="color:'+(criticas>0?'var(--dg)':'var(--ok)')+';">'+criticas+'</div><div class="kpi-l">Criticas</div></div>';
+  var posLabels=rows.map(function(r){return r.pos+(rows.filter(function(x){return x.pos===r.pos;}).length>1?' ('+r.placa+')':'');});
+  var W=Math.max(400,rows.length*52);
+  destroyChart('chartKmPos');var c1=document.getElementById('chartKmPos');c1.width=W;
+  chartInstances['chartKmPos']=new Chart(c1,{type:'bar',data:{labels:posLabels,datasets:[{label:'Km Recorrido',data:rows.map(function(r){return r.kmRec;}),backgroundColor:'rgba(37,99,168,0.75)',borderRadius:4},{label:'Km Proyectado',data:rows.map(function(r){return r.kmProy;}),backgroundColor:'rgba(60,179,113,0.75)',borderRadius:4}]},options:{responsive:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{ticks:{font:{size:10},callback:function(v){return v.toLocaleString('es-CO');}}}}}});
+  destroyChart('chartVida');var vc=rows.map(function(r){return r.vidaRest<=10?'rgba(220,38,38,.8)':r.vidaRest<=40?'rgba(217,119,6,.8)':'rgba(22,163,74,.8)';});var c2=document.getElementById('chartVida');c2.width=W;
+  chartInstances['chartVida']=new Chart(c2,{type:'bar',data:{labels:posLabels,datasets:[{label:'Vida Util (%)',data:rows.map(function(r){return r.vidaRest;}),backgroundColor:vc,borderRadius:4}]},options:{responsive:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{min:0,max:100,ticks:{font:{size:10},callback:function(v){return v+'%';}}}}}});
+  destroyChart('chartCpk');var c3=document.getElementById('chartCpk');c3.width=W;
+  chartInstances['chartCpk']=new Chart(c3,{type:'bar',data:{labels:posLabels,datasets:[{label:'CPK ($/km)',data:rows.map(function(r){return r.cpk;}),backgroundColor:'rgba(124,58,237,.75)',borderRadius:4}]},options:{responsive:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{ticks:{font:{size:10},callback:function(v){return '$'+v.toLocaleString('es-CO');}}}}}});
+  var ejeMap={};
+  rows.forEach(function(r){var k=r.atype==='dir'?'Direccion':r.atype==='trac'?'Traccion':r.atype==='libre'?'Libre':'Repuesto';if(!ejeMap[k])ejeMap[k]={kmRec:[],kmProy:[],vida:[]};ejeMap[k].kmRec.push(r.kmRec);ejeMap[k].kmProy.push(r.kmProy);ejeMap[k].vida.push(r.vidaRest);});
+  var ejeLabels=Object.keys(ejeMap);
+  destroyChart('chartEje');var c4=document.getElementById('chartEje');c4.width=Math.max(300,ejeLabels.length*120);
+  chartInstances['chartEje']=new Chart(c4,{type:'bar',data:{labels:ejeLabels,datasets:[{label:'Km Rec. prom.',data:ejeLabels.map(function(k){return avgArr(ejeMap[k].kmRec);}),backgroundColor:'rgba(37,99,168,.75)',borderRadius:4},{label:'Km Proy. prom.',data:ejeLabels.map(function(k){return avgArr(ejeMap[k].kmProy);}),backgroundColor:'rgba(60,179,113,.75)',borderRadius:4},{label:'Vida util (%)',data:ejeLabels.map(function(k){return avgArr(ejeMap[k].vida);}),backgroundColor:'rgba(217,119,6,.75)',borderRadius:4,yAxisID:'y2'}]},options:{responsive:false,plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{ticks:{font:{size:10},callback:function(v){return v.toLocaleString('es-CO');}},position:'left'},y2:{ticks:{font:{size:10},callback:function(v){return v+'%';}},position:'right',grid:{display:false},min:0,max:100}}}});
+  var disenioMap={};
+  rows.filter(function(r){return r.disenio!=='—'&&r.kmProy>0;}).forEach(function(r){var k=r.marca+' '+r.disenio;if(!disenioMap[k])disenioMap[k]=[];disenioMap[k].push(r.kmProy);});
+  var rankLabels=Object.keys(disenioMap).sort(function(a,b){return avgArr(disenioMap[b])-avgArr(disenioMap[a]);}).slice(0,10);
+  destroyChart('chartRanking');var c5=document.getElementById('chartRanking');c5.width=Math.max(320,rankLabels.length*90);
+  chartInstances['chartRanking']=new Chart(c5,{type:'bar',data:{labels:rankLabels,datasets:[{label:'Km Proyectado prom.',data:rankLabels.map(function(k){return avgArr(disenioMap[k]);}),backgroundColor:rankLabels.map(function(_,i){return 'hsl('+(160+i*18)+',60%,45%)';}),borderRadius:4}]},options:{responsive:false,indexAxis:'y',plugins:{legend:{labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10},callback:function(v){return v.toLocaleString('es-CO');}},grid:{color:'rgba(0,0,0,.05)'}},y:{ticks:{font:{size:10}},grid:{display:false}}}}});
+  var th='<thead><tr><th>Pos.</th><th>Veh.</th><th>Eje</th><th>Marca/Diseno</th><th>Prof.(mm)</th><th>Vida util</th><th>Km Rec.</th><th>Km Proy.</th><th>CPK</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    var vb=r.vidaRest<=10?'urg':r.vidaRest<=40?'aten':'ok';
+    var bar=r.vidaRest>0?'<div style="background:var(--bd);border-radius:4px;height:6px;width:100%;margin-top:3px;"><div style="height:6px;border-radius:4px;width:'+r.vidaRest+'%;background:'+(r.vidaRest<=10?'var(--dg)':r.vidaRest<=40?'var(--wn)':'var(--ok)')+'"></div></div>':'';
+    th+='<tr><td><b>'+r.pos+'</b></td><td>'+r.placa+'</td><td><span class="rb info">'+(r.atype==='dir'?'Dir.':r.atype==='trac'?'Trac.':r.atype==='libre'?'Libre':'Rep.')+'</span></td><td>'+r.marca+'<br><span style="font-size:10px;color:var(--mu);">'+r.disenio+'</span></td><td style="text-align:center;">'+(r.depProm!==null?r.depProm+' mm':'—')+'</td><td><span class="rb '+vb+'">'+r.vidaRest+'%</span>'+bar+'</td><td style="text-align:right;">'+(r.kmRec>0?r.kmRec.toLocaleString('es-CO')+' km':'—')+'</td><td style="text-align:right;">'+(r.kmProy>0?r.kmProy.toLocaleString('es-CO')+' km':'—')+'</td><td style="text-align:right;">'+(r.cpk>0?'$'+r.cpk.toLocaleString('es-CO'):'—')+'</td></tr>';
+  });
+  th+='</tbody>';document.getElementById('metTable').innerHTML=th;
+}
+
+// WIRE UP EVENTS
+window.addEventListener('load',function(){
+  document.getElementById('btnLaunchInsp').addEventListener('click',function(){document.getElementById('splashScreen').style.display='none';document.getElementById('scrapWrapper').style.display='none';document.getElementById('appWrapper').style.display='block';var now=new Date();document.getElementById('hDate').textContent=now.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short',year:'numeric'});document.getElementById('cli_fecha').value=now.toISOString().split('T')[0];document.getElementById('cli_hinicio').value=now.toTimeString().slice(0,5);});
+  document.getElementById('btnLaunchScrap').addEventListener('click',function(){document.getElementById('splashScreen').style.display='none';document.getElementById('scrapWrapper').style.display='flex';document.getElementById('appWrapper').style.display='none';});
+  document.getElementById('btnBackScrap').addEventListener('click',function(){document.getElementById('splashScreen').style.display='flex';document.getElementById('scrapWrapper').style.display='none';document.getElementById('appWrapper').style.display='none';});
+  ['cm-email','cm-whatsapp','cm-ambos'].forEach(function(id){document.getElementById(id).addEventListener('click',function(){setCM(id.replace('cm-',''));});});
+  document.getElementById('btnIniciarInsp').addEventListener('click',function(){saveSession();goTab(1);});
+  document.getElementById('btnNuevoVeh').addEventListener('click',function(){newVehicle();goTab(1);});
+  document.getElementById('btnNuevoVeh2').addEventListener('click',function(){newVehicle();goTab(1);});
+  document.getElementById('btnQuitarGrupo').addEventListener('click',function(){changeAxles(-1);});
+  document.getElementById('btnAgregarGrupo').addEventListener('click',function(){changeAxles(1);});
+  document.getElementById('btnBackSesion').addEventListener('click',function(){goTab(0);});
+  document.getElementById('btnGoLlantas').addEventListener('click',function(){saveVeh();buildDiag();goTab(2);});
+  document.getElementById('btnBackVeh').addEventListener('click',function(){goTab(1);});
+  document.getElementById('btnGuardarVeh').addEventListener('click',function(){saveCurrentVehicle();});
+  document.getElementById('btnMasivo').addEventListener('click',openMass);
+  document.getElementById('btnCloseMass').addEventListener('click',closeMass);
+  document.getElementById('btnAddDmg').addEventListener('click',addDmg);
+  document.getElementById('btnValidar').addEventListener('click',openConfirm);
+  document.getElementById('btnOmitir').addEventListener('click',function(){var pos=getPositions();var idx=pos.findIndex(function(p){return p.id===currentVeh.sel;});if(idx<pos.length-1)selTire(pos[idx+1].id,pos[idx+1].label);});
+  document.getElementById('btnCloseConf').addEventListener('click',closeConf);
+  document.getElementById('btnBackLlantas').addEventListener('click',function(){goTab(2);});
+  document.getElementById('btnGoReportes').addEventListener('click',function(){goTab(4);});
+  document.getElementById('btnExportCSV').addEventListener('click',exportExcel);
+  document.getElementById('btnExportHTML').addEventListener('click',exportHTMLReport);
+  document.getElementById('btnExportCSV2').addEventListener('click',exportExcel);
+  document.getElementById('btnExportHTML2').addEventListener('click',exportHTMLReport);
+  document.getElementById('sessionBadge').addEventListener('click',function(){goTab(5);});
+  ['it0','it1','it2','it3'].forEach(function(id,i){document.getElementById(id).addEventListener('click',function(){switchIT(i);});});
+  ['rt0','rt1','rt2','rt3','rt4'].forEach(function(id,i){document.getElementById(id).addEventListener('click',function(){switchRTab(i);});});
+  for(var i=0;i<7;i++){(function(idx){document.getElementById('nt'+idx).addEventListener('click',function(){goTab(idx);});})(i);}
+  document.getElementById('tipoV').addEventListener('change',function(){saveVeh();updateSemLegend();});
+  document.getElementById('incRep').addEventListener('change',function(){buildDiag();});
+  document.getElementById('tf_marca').addEventListener('input',onMarcaInput);
+  document.getElementById('tf_disenio').addEventListener('input',onDisenioInput);
+  ['tf_int','tf_cen','tf_ext'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){saveTF();updateTFSemTag();});});
+  ['tf_psi','tf_dim','tf_interno','tf_serie','tf_reenc','tf_obs','tf_fm','tf_km','tf_obsm'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',saveTF);});
+  document.getElementById('tf_tipo').addEventListener('change',saveTF);
+  ['tf_bp','tf_rot','tf_alin','tf_des'].forEach(function(id){document.getElementById(id).addEventListener('change',saveTF);});
+  ['b','r','m'].forEach(function(c){document.getElementById('cb_'+c).addEventListener('click',function(){selCond(c);});});
+  document.addEventListener('click',function(e){if(!e.target.closest('#tf_marca')&&!e.target.closest('#marcaSugg'))document.getElementById('marcaSugg').style.display='none';if(!e.target.closest('#tf_disenio')&&!e.target.closest('#disenioSugg'))document.getElementById('disenioSugg').style.display='none';});
+  document.getElementById('met_costo').addEventListener('input',buildMetrics);
+  document.getElementById('met_veh').addEventListener('change',buildMetrics);
+  buildAxleCfgs();buildChecklist();updateSemLegend();
+});
+</script>
+</body>
+</html>
